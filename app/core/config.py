@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     
     class Config:
         env_file = ".env"  # Sagt pydantic: lies die .env Datei im Projektroot
+        extra = "ignore"  # Ignoriert unbekannte Felder in .env statt Fehler zu werfen
+
+    # Google Reviews (Phase 6)
+    google_reviews_api_key: str = ""  # Kommt später in Phase 6
 
 
 @lru_cache()  # Cached das Ergebnis – Settings werden nur 1x geladen, nicht bei jedem Aufruf

@@ -13,7 +13,7 @@ settings = get_settings()
 # FastAPI-App erstellen mit Metadaten (sichtbar unter /docs)
 app = FastAPI(
     title=settings.app_name,  # Name in der API-Dokumentation
-    description="Social media content planner for Swiss driving schools",
+    description="Social media content planner for catchKen",
     version="0.1.0"  # Aktuelle Version – passen wir pro Phase an
 )
 
