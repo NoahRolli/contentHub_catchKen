@@ -1,22 +1,42 @@
-aiofiles==25.1.0
+# ============================================
+# catchKen Content Hub – Dependencies
+# ============================================
+# Installieren mit: pip install -r requirements.txt
+# Aktualisieren mit: pip freeze > requirements.txt
+
+# --- Web Framework ---
+fastapi==0.132.0              # Web-Framework für die REST API
+uvicorn==0.41.0               # ASGI Server – führt FastAPI aus
+starlette==0.52.1             # Basis von FastAPI (wird automatisch mitinstalliert)
+
+# --- Datenbank ---
+SQLAlchemy==2.0.46            # ORM – Datenbank-Tabellen als Python-Klassen
+
+# --- Templates & Frontend ---
+Jinja2==3.1.6                 # HTML Template-Engine
+MarkupSafe==3.0.3             # Sicheres HTML-Rendering (Jinja2-Abhängigkeit)
+aiofiles==25.1.0              # Asynchrones Lesen/Schreiben von Dateien
+
+# --- Konfiguration ---
+python-dotenv==1.2.1          # Liest .env Datei für Secrets
+pydantic==2.12.5              # Datenvalidierung und Settings
+pydantic_core==2.41.5         # Pydantic-Kern (wird automatisch mitinstalliert)
+pydantic-settings==2.13.1     # Settings-Erweiterung für pydantic
+
+# --- Upload & Formulare ---
+python-multipart==0.0.22      # Verarbeitet Datei-Uploads und Formulardaten
+
+# --- Sicherheit ---
+passlib==1.7.4                # Passwort-Hashing Framework
+bcrypt==5.0.0                 # Bcrypt-Algorithmus für sicheres Passwort-Hashing
+
+# --- System-Abhängigkeiten ---
+# (werden automatisch von obigen Paketen mitinstalliert)
 annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.12.1
-bcrypt==5.0.0
 click==8.3.1
-fastapi==0.132.0
 h11==0.16.0
 idna==3.11
-Jinja2==3.1.6
-MarkupSafe==3.0.3
-passlib==1.7.4
-pydantic==2.12.5
-pydantic-settings==2.13.1
-pydantic_core==2.41.5
-python-dotenv==1.2.1
-python-multipart==0.0.22
-SQLAlchemy==2.0.46
-starlette==0.52.1
 typing-inspection==0.4.2
 typing_extensions==4.15.0
-uvicorn==0.41.0
