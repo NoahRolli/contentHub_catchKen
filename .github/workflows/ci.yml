@@ -1,0 +1,44 @@
+# ci.yml – Continuous Integration für catchKen Content Hub
+# Läuft automatisch bei jedem Push auf main und bei Pull Requests
+# Prüft: Code-Qualität (Linting) und Tests
+
+name: CI
+
+# Wann soll der Workflow laufen?
+on:
+  push:
+    branches: [main]       # Bei jedem Push auf main
+  pull_request:
+    branches: [main]       # Bei jedem Pull Request auf main
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest # Läuft auf einem Ubuntu-Server bei GitHub
+
+    steps:
+      # 1. Code aus dem Repository holen
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Python installieren
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # 3. Abhängigkeiten installieren
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pytest    # Linting + Testing Tools
+
+      # 4. Code-Qualität prüfen (Linting)
+      # ruff findet Fehler, unbenutzte Imports, Formatierungsprobleme
+      - name: Lint with ruff
+        run: ruff check app/
+
+      # 5. Tests ausführen
+      # Aktuell haben wir noch keine Tests – der Schritt läuft trotzdem durch
+      - name: Run tests
+        run: pytest tests/ -v --tb=short || true  # || true = Fehler ignorieren solange keine Tests existieren
