@@ -128,6 +128,19 @@ catchKen/
 
 ---
 
+## Content Pipeline
+```mermaid
+graph LR
+    A[Content-Quelle] --> B[Verarbeitung]
+    B --> C[LLM Generierung]
+    C --> D[DRAFT]
+    D --> E[👀 Admin Review]
+    E --> F[READY]
+    F --> G[PUBLISHED]
+```
+
+*Detailliertes Diagramm: [docs/content-pipeline.md](docs/content-pipeline.md)*
+
 ## Sicherheit
 
 - Secrets in `.env` (nie im Code oder auf GitHub)
