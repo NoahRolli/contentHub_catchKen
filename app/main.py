@@ -6,6 +6,12 @@ from fastapi import FastAPI  # Das Web-Framework
 from fastapi.staticfiles import StaticFiles  # Stellt CSS/JS/Bilder bereit
 from fastapi.templating import Jinja2Templates  # Rendert HTML-Templates
 from app.core.config import get_settings  # Unsere App-Einstellungen aus .env
+from app.core.database import engine, Base  # DB-Engine und Basisklasse
+import app.models  # Alle Modelle laden (damit Base sie kennt)
+
+# Datenbank-Tabellen erstellen (wenn sie noch nicht existieren)
+# Wird bei jedem Serverstart geprüft – erstellt nur fehlende Tabellen
+Base.metadata.create_all(bind=engine)
 
 # Settings laden
 settings = get_settings()
