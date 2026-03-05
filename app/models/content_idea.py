@@ -2,9 +2,8 @@
 # Speichert LLM-generierte Ideen die noch nicht eingeplant sind
 # Dient als "Ideenpool" in der Sidebar des Kalenders
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey  # Spaltentypen
+from sqlalchemy import Column, Integer, String, DateTime, Text  # Spaltentypen
 from sqlalchemy.sql import func  # Für automatische Zeitstempel
-from sqlalchemy.orm import relationship  # Für Beziehungen zwischen Tabellen
 from app.core.database import Base  # Basisklasse für alle Modelle
 
 
