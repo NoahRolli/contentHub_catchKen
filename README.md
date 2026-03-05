@@ -116,7 +116,7 @@ catchKen/
 
 | Phase | Beschreibung                  | Status        |
 | ----- | ----------------------------- | ------------- |
-| 1     | Fundament & Projektstruktur   | 🔄 In Arbeit  |
+| 1     | Fundament & Projektstruktur   | Abgeschlossen |
 | 2     | Erfolgs-Posts (CRUD)          | ⏳ Geplant    |
 | 3     | LLM-Integration (Ollama)      | ⏳ Geplant    |
 | 4     | Theorie-Posts                 | ⏳ Geplant    |
@@ -134,7 +134,7 @@ graph LR
     A[Content-Quelle] --> B[Verarbeitung]
     B --> C[LLM Generierung]
     C --> D[DRAFT]
-    D --> E[👀 Admin Review]
+    D --> E[Admin Review]
     E --> F[READY]
     F --> G[PUBLISHED]
 ```
@@ -149,6 +149,14 @@ graph LR
 - Pydantic Validierung aller Eingaben
 - Consent-Pflicht für Schülerbilder
 - Keine vollständige Artikelübernahme (nur LLM-Zusammenfassungen)
+
+---
+
+## Dokumentation
+
+- **API Docs (live):** http://127.0.0.1:8000/docs (wenn Server läuft)
+- **Content Pipeline:** [docs/content-pipeline.md](docs/content-pipeline.md)
+- **Auto-generierte Doku:** [docs/auto-generated.md](docs/auto-generated.md) (wird bei jedem Push aktualisiert)
 
 ---
 
