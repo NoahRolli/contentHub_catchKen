@@ -39,4 +39,5 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add docs/auto-generated.md
           git diff --staged --quiet || git commit -m "docs: auto-update documentation"
+          git pull --rebase origin main
           git push
