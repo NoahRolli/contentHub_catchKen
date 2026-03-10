@@ -7,8 +7,14 @@ name: Generate Docs
 # Wann soll der Workflow laufen?
 on:
   push:
-    branches: [main]  # Nur bei Push auf main
-
+    branches: [main]
+    paths:
+        - 'app/models/**'       # Wenn sich Models ändern
+        - 'app/main.py'         # Wenn sich Endpunkte ändern
+        - 'app/routers/**'      # Wenn sich Router ändern
+        - 'scripts/generate_docs.py'  # Wenn sich das Doku-Skript ändert
+  workflow_dispatch:            # Erlaubt manuelles Auslösen auf GitHub
+        
 jobs:
   generate-docs:
     runs-on: ubuntu-latest  # Läuft auf Ubuntu bei GitHub
