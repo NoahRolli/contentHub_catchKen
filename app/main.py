@@ -2,7 +2,7 @@
 # Hier wird die FastAPI-App erstellt und konfiguriert
 # Server starten mit: uvicorn app.main:app --reload
 
-from fastapi import FastAPI  # Das Web-Framework
+from fastapi import FastAPI, Request  # Web-Framework + Request-Objekt für Templates
 from fastapi.staticfiles import StaticFiles  # Stellt CSS/JS/Bilder bereit
 from fastapi.templating import Jinja2Templates  # Rendert HTML-Templates
 from app.core.config import get_settings  # Unsere App-Einstellungen aus .env
@@ -38,13 +38,9 @@ app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
 # === API Endpunkte (Routes) ===
 
 @app.get("/")  # GET-Request auf die Startseite
-async def root():
-    """Startseite – zeigt den aktuellen Status der App als JSON."""
-    return {
-        "app": settings.app_name,
-        "status": "running",
-        "phase": "1 - Foundation"
-    }
+async def root(request: Request):
+    """Startseite – zeigt das Frontend mit Formular und Post-Liste."""
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")  # Health-Check Endpunkt

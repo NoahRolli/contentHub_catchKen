@@ -1,0 +1,87 @@
+<!-- index.html – Startseite des catchKen Content Hub -->
+<!-- Zeigt eine Übersicht aller Erfolgs-Posts und ein Formular zum Erstellen -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>catchKen Content Hub</title>
+    <!-- Eigenes CSS laden -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- === Header === -->
+    <header>
+        <h1>🎯 catchKen Content Hub</h1>
+        <p>Social Media Planner für Fahrschulen</p>
+    </header>
+
+    <main>
+        <!-- === Formular: Neuer Erfolgs-Post === -->
+        <section class="card">
+            <h2>🟢 Neuer Erfolgs-Post</h2>
+            <form id="success-form" enctype="multipart/form-data">
+                
+                <!-- Vorname (optional) -->
+                <div class="form-group">
+                    <label for="student_name">Vorname (optional)</label>
+                    <input type="text" id="student_name" name="student_name" 
+                           placeholder="z.B. Max" maxlength="100">
+                </div>
+
+                <!-- Prüfungsdatum (Pflicht) -->
+                <div class="form-group">
+                    <label for="exam_date">Prüfungsdatum *</label>
+                    <input type="date" id="exam_date" name="exam_date" required>
+                </div>
+
+                <!-- Kategorie -->
+                <div class="form-group">
+                    <label for="category">Kategorie</label>
+                    <select id="category" name="category">
+                        <option value="B" selected>B – Auto</option>
+                        <option value="A">A – Motorrad</option>
+                        <option value="A1">A1 – Kleinmotorrad</option>
+                        <option value="BE">BE – Auto mit Anhänger</option>
+                        <option value="C">C – Lastwagen</option>
+                        <option value="D">D – Bus</option>
+                    </select>
+                </div>
+
+                <!-- Bild-Upload (optional) -->
+                <div class="form-group">
+                    <label for="image">Bild (optional)</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+
+                <!-- Consent (Pflicht) -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="consent_given" name="consent_given" required>
+                    <label for="consent_given">
+                        Einverständnis für Bildnutzung auf Social Media *
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary">Post erstellen</button>
+            </form>
+
+            <!-- Feedback-Nachricht -->
+            <div id="form-message" class="message hidden"></div>
+        </section>
+
+        <!-- === Liste der Erfolgs-Posts === -->
+        <section class="card">
+            <h2>📋 Alle Erfolgs-Posts</h2>
+            <!-- Wird per JavaScript gefüllt -->
+            <div id="posts-list">
+                <p class="loading">Lade Posts...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript laden -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
