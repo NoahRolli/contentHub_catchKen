@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates  # Rendert HTML-Templates
 from app.core.config import get_settings  # Unsere App-Einstellungen aus .env
 from app.core.database import engine, Base  # DB-Engine und Basisklasse
 import app.models  # Alle Modelle laden (damit Base sie kennt)
+from app.routers.student_success import router as success_router  # Erfolgs-Posts Endpunkte
 
 # Datenbank-Tabellen erstellen (wenn sie noch nicht existieren)
 # Wird bei jedem Serverstart geprüft – erstellt nur fehlende Tabellen
@@ -29,6 +30,9 @@ app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 # Template-Engine konfigurieren – rendert HTML-Seiten mit dynamischen Daten
 templates = Jinja2Templates(directory="frontend/templates")
+
+# === Router registrieren ===
+app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
 
 
 # === API Endpunkte (Routes) ===
