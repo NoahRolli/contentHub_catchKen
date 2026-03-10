@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 10.03.2026 13:55 via GitHub Actions
+> Automatisch generiert am 10.03.2026 16:33 via GitHub Actions
 
 ---
 
@@ -8,7 +8,7 @@
 
 | Methode | Pfad | Funktion | Beschreibung |
 | ------- | ---- | -------- | ------------ |
-| `GET` | `/` | `root` | Startseite – zeigt den aktuellen Status der App als JSON. |
+| `GET` | `/` | `root` | Startseite – zeigt das Frontend mit Formular und Post-Liste. |
 | `GET` | `/health` | `health_check` | Wird genutzt um zu prüfen ob der Server läuft. |
 
 ---
