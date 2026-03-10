@@ -81,3 +81,4 @@ class StudentSuccessListResponse(BaseModel):
     
     total: int  # Gesamtanzahl aller Posts
     posts: list[StudentSuccessResponse]  # Die eigentlichen Posts
+    
