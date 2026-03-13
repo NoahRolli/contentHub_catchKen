@@ -1,0 +1,21 @@
+# docker-compose.yml – Startkonfiguration für catchKen Content Hub
+# Startet die App als Container mit allen nötigen Einstellungen
+# Starten mit: docker compose up -d
+
+version: "3.8"
+
+services:
+  # === Haupt-App ===
+  web:
+    build: .                          # Baut das Image aus dem Dockerfile
+    container_name: catchken-app      # Name des Containers
+    ports:
+      - "8000:8000"                   # Host:Container Port-Mapping
+    volumes:
+      - ./.env:/app/.env              # .env Datei ins Container mounten (Secrets)
+      - ./data/media:/app/media       # Media-Ordner persistent speichern
+      - ./data/db:/app/data           # Datenbank persistent speichern
+    environment:
+      - APP_ENV=production            # Produktionsmodus
+      - DATABASE_URL=sqlite:///./data/catchken.db  # DB-Pfad im Container
+    restart: unless-stopped           # Startet automatisch neu bei Absturz

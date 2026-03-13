@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # Allgemein
     app_name: str = "catchKen Content Hub"
     app_env: str = "development"  # development / production
-    database_url: str = "sqlite:///./catchken.db"  # Pfad zur SQLite-Datenbank
+    database_url: str = "sqlite:///./catchken.db"  # Lokal: Projektroot, Docker: /app/data/
     secret_key: str = "change-me-to-random-string"  # Für spätere Auth/Sicherheit
     
     # LLM-Einstellungen
