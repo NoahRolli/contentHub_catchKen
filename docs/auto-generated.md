@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 10.03.2026 16:33 via GitHub Actions
+> Automatisch generiert am 18.03.2026 10:38 via GitHub Actions
 
 ---
 
@@ -13,7 +13,7 @@
 
 ---
 
-## Datenbank-Modelle (7 Tabellen)
+## Datenbank-Modelle (10 Tabellen)
 
 ### Asset
 **Datei:** `app/models/asset.py`
@@ -66,6 +66,33 @@ Geplante Posts – das Herzstück des Kalenders.
 Erfolgs-Posts – bestandene Fahrschüler:innen als Social-Media-Content.
 
 **Felder:** `__tablename__`, `id`, `user_id`, `user`, `student_name`, `exam_date`, `category`, `image_path`, `consent_given`, `caption`, `hashtags`, `story_text`, `status`, `created_at`, `updated_at`
+
+---
+
+### Platform
+**Datei:** `app/models/training_post.py`
+
+Für welche Plattform ist dieser Trainings-Post?
+
+**Felder:** `INSTAGRAM`, `TIKTOK`
+
+---
+
+### ContentType
+**Datei:** `app/models/training_post.py`
+
+Welcher Content-Typ ist der Trainings-Post?
+
+**Felder:** `SUCCESS`, `NEWS`, `THEORY`, `REVIEW`
+
+---
+
+### TrainingPost
+**Datei:** `app/models/training_post.py`
+
+Ein einzelner Trainings-Post aus dem echten Instagram/TikTok-Account.
+
+**Felder:** `__tablename__`, `id`, `platform`, `content_type`, `caption`, `hashtags`, `source_url`, `original_date`, `created_at`
 
 ---
 
