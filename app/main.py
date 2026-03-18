@@ -9,6 +9,8 @@ from app.core.config import get_settings  # Unsere App-Einstellungen aus .env
 from app.core.database import engine, Base  # DB-Engine und Basisklasse
 import app.models  # Alle Modelle laden (damit Base sie kennt)
 from app.routers.student_success import router as success_router  # Erfolgs-Posts Endpunkte
+from app.routers.training_data import router as training_router  # Trainingsdaten Endpunkte
+
 
 # Datenbank-Tabellen erstellen (wenn sie noch nicht existieren)
 # Wird bei jedem Serverstart geprüft – erstellt nur fehlende Tabellen
@@ -33,6 +35,7 @@ templates = Jinja2Templates(directory="frontend/templates")
 
 # === Router registrieren ===
 app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
+app.include_router(training_router)  # Trainingsdaten unter /api/training-data/
 
 
 # === API Endpunkte (Routes) ===

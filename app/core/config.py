@@ -15,8 +15,12 @@ class Settings(BaseSettings):
     secret_key: str = "change-me-to-random-string"  # Für spätere Auth/Sicherheit
     
     # LLM-Einstellungen
+    llm_provider: str = "ollama"  # "ollama" oder "openai" — steuert welcher Provider genutzt wird
     ollama_base_url: str = "http://localhost:11434"  # Lokaler Ollama Server
+    ollama_model: str = "llama3.2"  # Welches Ollama Modell (llama3.2, mistral, etc.)
+    ollama_timeout: float = 120.0  # Timeout in Sekunden — lokale LLMs brauchen Zeit
     openai_api_key: str = ""  # Fallback – nur wenn Ollama nicht reicht
+    openai_model: str = "gpt-4o-mini"  # OpenAI Modell für Phase 3b
     
     # Dateipfade
     media_path: str = "media/uploads"  # Wo Uploads gespeichert werden (SSD via Symlink)
