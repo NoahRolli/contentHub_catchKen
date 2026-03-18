@@ -35,7 +35,8 @@ def get_llm_provider() -> BaseLLMProvider:
     """
     # Import hier statt oben → vermeidet zirkuläre Imports
     # (config importiert evtl. etwas das wiederum llm importiert)
-    from app.core.config import settings
+    from app.core.config import get_settings
+    settings = get_settings()
 
     # Provider-Name aus .env lesen (default: "ollama")
     provider_name = getattr(settings, "LLM_PROVIDER", "ollama").lower()
