@@ -2,7 +2,7 @@
 
 AI-powered social media content planner for Swiss driving schools. Automates content generation for Instagram & TikTok using local LLMs, featuring calendar-based scheduling, RSS-powered news posts, theory content, student success stories, and review highlights.
 
-**Work in Progress – Phase 2 complete**
+**Work in Progress – Phase 3 complete**
 
 ---
 
@@ -19,9 +19,11 @@ AI-powered social media content planner for Swiss driving schools. Automates con
 | Backend | Python 3.13 · FastAPI · SQLAlchemy · SQLite |
 | Frontend (MVP) | HTML · CSS · JavaScript |
 | Frontend (planned) | React |
-| AI | Ollama local (OpenAI as fallback) — switchable |
+| AI | Ollama local (OpenAI as fallback) — switchable via `.env` |
+| HTTP Client | httpx (async, for LLM communication) |
 | Auth | Passlib · bcrypt |
 | CI/CD | GitHub Actions (ruff linting · pytest · auto-docs) |
+| Containerization | Docker · docker-compose |
 
 ---
 
@@ -36,9 +38,10 @@ catchKen/
 │   │   ├── database.py            # SQLAlchemy engine & sessions
 │   │   └── security.py            # Password hashing (bcrypt)
 │   │
-│   ├── models/                    # Database models (7 tables)
+│   ├── models/                    # Database models (8 tables)
 │   │   ├── user.py                # Admin accounts
 │   │   ├── student_success_post.py # Passed students content
+│   │   ├── training_post.py       # Training data for few-shot prompting
 │   │   ├── content_source.py      # RSS feeds, Google Reviews
 │   │   ├── news_item.py           # Scanned news articles
 │   │   ├── content_idea.py        # LLM-generated suggestions
@@ -46,13 +49,21 @@ catchKen/
 │   │   └── asset.py               # Images, videos
 │   │
 │   ├── schemas/                   # Pydantic request/response models
-│   │   └── student_success.py     # Success post validation
+│   │   ├── student_success.py     # Success post + LLM generation schemas
+│   │   └── training_data.py       # Training data upload schemas
 │   │
 │   ├── routers/                   # API endpoints
-│   │   └── student_success.py     # CRUD for success posts
+│   │   ├── student_success.py     # CRUD + LLM generate for success posts
+│   │   └── training_data.py       # Training data upload & management
 │   │
 │   ├── services/                  # Business logic
-│   │   └── llm/                   # Ollama/OpenAI integration (Phase 3)
+│   │   └── llm/                   # LLM integration
+│   │       ├── __init__.py        # Package exports
+│   │       ├── base_provider.py   # Abstract provider interface (ABC)
+│   │       ├── ollama_provider.py # Ollama implementation
+│   │       ├── provider_factory.py # Provider selection from config
+│   │       ├── prompts.py         # Prompt templates (generic + few-shot)
+│   │       └── training_data.py   # Training data loading & formatting
 │   │
 │   └── utils/                     # Helper functions
 │
@@ -76,6 +87,9 @@ catchKen/
 ├── .github/workflows/
 │   ├── ci.yml                     # Linting + tests
 │   └── docs.yml                   # Auto-generate documentation
+├── Dockerfile                     # Container build
+├── docker-compose.yml             # Container orchestration
+├── .dockerignore
 ├── .env.example
 ├── .gitignore
 ├── requirements.txt
@@ -90,7 +104,7 @@ catchKen/
 
 - Python 3.13+
 - Git
-- [Ollama](https://ollama.ai) (for local LLM generation, Phase 3)
+- [Ollama](https://ollama.ai) (for local LLM generation)
 
 ### Setup
 ```bash
@@ -107,6 +121,10 @@ pip install -r requirements.txt
 
 # Configure environment variables
 cp .env.example .env
+
+# Start Ollama (separate terminal)
+ollama serve
+ollama pull llama3.2
 
 # Start the server
 uvicorn app.main:app --reload
@@ -128,6 +146,21 @@ uvicorn app.main:app --reload
 - 🔵 **Theory Posts** – Swiss driving theory content with quizzes
 - 🟡 **Reviews** – Google Reviews repurposed as social media content
 
+### LLM Content Generation (Phase 3)
+- **Two generation modes:**
+  - **Generic mode** – LLM generates captions from a standard prompt when no training data exists
+  - **Few-shot mode** – LLM imitates the style of real posts when training data is uploaded
+- **Dual platform output** – Generates both Instagram caption + hashtags and TikTok description per post
+- **Provider system** – Switchable between Ollama (local) and OpenAI (cloud fallback) via `.env`
+- **Editorial control** – Generated content is previewed before saving, admin can edit before publishing
+
+### Training Data System
+- Upload real Instagram/TikTok posts as few-shot examples
+- Import from Instagram JSON export (official Meta download)
+- Bulk upload via API
+- Separate training data per platform (Instagram vs TikTok) and content type
+- Stats endpoint to monitor training data coverage
+
 ### Planning System
 - Calendar view (week / 2 weeks / month)
 - Drag & drop scheduling
@@ -143,7 +176,7 @@ uvicorn app.main:app --reload
 - [x] Project structure with `app/core/` architecture
 - [x] FastAPI server with health check
 - [x] Config, database, security foundation
-- [x] All 7 database models (User, StudentSuccessPost, ContentSource, NewsItem, ContentIdea, ScheduledPost, Asset)
+- [x] All 8 database models (User, StudentSuccessPost, TrainingPost, ContentSource, NewsItem, ContentIdea, ScheduledPost, Asset)
 - [x] Pydantic schemas for validation
 - [x] Success posts CRUD (create, read, update, delete)
 - [x] Image upload to SSD via symlink
@@ -151,7 +184,15 @@ uvicorn app.main:app --reload
 - [x] Frontend form with post list
 - [x] CI pipeline (ruff linting + pytest)
 - [x] Auto-generated documentation
-- [ ] LLM integration (Ollama for captions & hashtags)
+- [x] Docker setup (Dockerfile + docker-compose)
+- [x] LLM integration (Ollama provider with async HTTP)
+- [x] Provider interface (ABC) for swappable LLM backends
+- [x] Prompt templates (generic + few-shot modes)
+- [x] Training data model, schemas & CRUD endpoints
+- [x] Instagram JSON import for training data
+- [x] Content generation endpoint (Instagram + TikTok)
+- [x] Apply-generated endpoint (save after review)
+- [ ] Prompt tuning (hashtag separation, quote removal)
 - [ ] Theory post generation
 - [ ] RSS news scanning & filtering
 - [ ] Google Reviews integration
@@ -172,7 +213,48 @@ graph LR
     F --> G[📤 PUBLISHED]
 ```
 
+### LLM Generation Flow
+```mermaid
+graph TD
+    A[Success Post Created] --> B{Training Data?}
+    B -->|Yes| C[Few-Shot Prompt]
+    B -->|No| D[Generic Prompt]
+    C --> E[Ollama / OpenAI]
+    D --> E
+    E --> F[Instagram Caption + Hashtags]
+    E --> G[TikTok Description + Hashtags]
+    F --> H[Admin Review & Edit]
+    G --> H
+    H --> I[Save to Post]
+```
+
 *Detailed diagrams: [docs/content-pipeline.md](docs/content-pipeline.md)*
+
+---
+
+## API Endpoints
+
+### Success Posts
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/success/` | Create new success post |
+| GET | `/api/success/` | List all success posts |
+| GET | `/api/success/{id}` | Get single post |
+| PUT | `/api/success/{id}` | Update post |
+| DELETE | `/api/success/{id}` | Delete post |
+| POST | `/api/success/{id}/generate` | Generate captions via LLM |
+| POST | `/api/success/{id}/apply-generated` | Save generated content |
+
+### Training Data
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/training-data/` | Create single training post |
+| POST | `/api/training-data/bulk` | Bulk upload training posts |
+| POST | `/api/training-data/import-instagram` | Import Instagram JSON export |
+| GET | `/api/training-data/` | List training posts |
+| GET | `/api/training-data/stats` | Training data statistics |
+| DELETE | `/api/training-data/{id}` | Delete single training post |
+| DELETE | `/api/training-data/` | Delete all (with optional filter) |
 
 ---
 
@@ -182,7 +264,7 @@ graph LR
 |-------|-------------|--------|
 | 1 | Foundation & project structure | ✅ Complete |
 | 2 | Success posts CRUD & frontend | ✅ Complete |
-| 3 | LLM integration (Ollama) | ⏳ Next |
+| 3 | LLM integration (Ollama) | ✅ Complete |
 | 4 | Theory posts | ⏳ Planned |
 | 5 | News posts (RSS) | ⏳ Planned |
 | 6 | Reviews | ⏳ Planned |
