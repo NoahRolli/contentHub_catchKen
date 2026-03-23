@@ -1,26 +1,33 @@
 <!-- index.html – Startseite des catchKen Content Hub -->
 <!-- Zeigt eine Übersicht aller Erfolgs-Posts und ein Formular zum Erstellen -->
-
+<!-- Phase 3: Generate-Button pro Post für LLM Caption-Generierung -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>catchKen Content Hub</title>
+    <!-- Google Font: Poppins für modernes Aussehen -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Eigenes CSS laden -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <!-- === Header === -->
+    <!-- === Header mit catchKen Gradient === -->
     <header>
-        <h1>🎯 catchKen Content Hub</h1>
+        <h1>catchKen Content Hub</h1>
         <p>Social Media Planner für Fahrschulen</p>
     </header>
 
     <main>
+        <!-- === Trainingsdaten-Status === -->
+        <section class="card training-status" id="training-status">
+            <!-- Wird per JavaScript gefüllt -->
+        </section>
+
         <!-- === Formular: Neuer Erfolgs-Post === -->
         <section class="card">
-            <h2>🟢 Neuer Erfolgs-Post</h2>
+            <h2>Neuer Erfolgs-Post</h2>
             <form id="success-form" enctype="multipart/form-data">
                 
                 <!-- Vorname (optional) -->
@@ -73,13 +80,52 @@
 
         <!-- === Liste der Erfolgs-Posts === -->
         <section class="card">
-            <h2>📋 Alle Erfolgs-Posts</h2>
+            <h2>Alle Erfolgs-Posts</h2>
             <!-- Wird per JavaScript gefüllt -->
             <div id="posts-list">
                 <p class="loading">Lade Posts...</p>
             </div>
         </section>
     </main>
+
+    <!-- === Modal: Generierte Captions anzeigen === -->
+    <div id="generate-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Generierter Content</h3>
+                <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Provider Info -->
+                <div id="modal-provider-info" class="provider-info"></div>
+
+                <!-- Instagram -->
+                <div class="generated-section">
+                    <h4>Instagram</h4>
+                    <label>Caption</label>
+                    <textarea id="modal-ig-caption" rows="4"></textarea>
+                    <label>Hashtags</label>
+                    <textarea id="modal-ig-hashtags" rows="2"></textarea>
+                </div>
+
+                <!-- TikTok -->
+                <div class="generated-section">
+                    <h4>TikTok</h4>
+                    <label>Beschreibung</label>
+                    <textarea id="modal-tt-description" rows="3"></textarea>
+                    <label>Hashtags</label>
+                    <textarea id="modal-tt-hashtags" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+                <button class="btn-primary" id="modal-save-btn" onclick="saveGenerated()">
+                    Caption übernehmen
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript laden -->
     <script src="/static/js/app.js"></script>

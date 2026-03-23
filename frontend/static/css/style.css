@@ -1,59 +1,115 @@
 /* style.css – Hauptstylesheet für catchKen Content Hub */
-/* Einfaches, sauberes Design – wird später verfeinert */
+/* Design basierend auf catch-ken.ch: Orange → Pink → Violett Gradient */
+
+/* === CSS Custom Properties (Farben zentral definiert) === */
+:root {
+    --gradient-start: #f7931e;     /* Orange (aus catch-ken.ch Logo) */
+    --gradient-mid: #e84393;       /* Pink/Magenta (aus catch-ken.ch Gradient) */
+    --gradient-end: #2d1b69;       /* Dunkles Violett (aus catch-ken.ch Hintergrund) */
+    --accent-orange: #f7931e;      /* Akzentfarbe für Buttons */
+    --accent-orange-hover: #e07f0e;/* Dunkleres Orange für Hover */
+    --accent-pink: #e84393;        /* Pink für aktive Elemente */
+    --text-dark: #2d1b69;          /* Violett als Textfarbe */
+    --text-medium: #555;           /* Grau für Zusatzinfos */
+    --text-light: #999;            /* Hellgrau für Platzhalter */
+    --bg-light: #faf8fc;           /* Leichter Violett-Stich im Hintergrund */
+    --bg-white: #ffffff;
+    --border-light: #ede8f5;       /* Zarte violette Bordüre */
+    --border-medium: #d9d0e8;
+    --success-bg: #d4edda;
+    --success-text: #155724;
+    --error-bg: #f8d7da;
+    --error-text: #721c24;
+    --shadow: 0 2px 12px rgba(45, 27, 105, 0.08);  /* Violetter Schatten */
+    --shadow-hover: 0 4px 20px rgba(45, 27, 105, 0.15);
+}
 
 /* === Reset & Grundeinstellungen === */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Padding wird in die Breite eingerechnet */
+    box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f5f5f5; /* Hellgrauer Hintergrund */
-    color: #333; /* Dunkle Schriftfarbe */
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
     line-height: 1.6;
 }
 
-/* === Header === */
+/* === Header mit catchKen Gradient === */
 header {
-    background-color: #1a1a2e; /* Dunkles Blau */
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
     color: white;
-    padding: 1.5rem 2rem;
+    padding: 2rem 2rem;
     text-align: center;
 }
 
 header h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 0.3rem;
+    letter-spacing: -0.5px;
 }
 
 header p {
     font-size: 0.95rem;
-    opacity: 0.8; /* Leicht transparent für Untertitel */
+    opacity: 0.85;
+    font-weight: 400;
 }
 
 /* === Hauptbereich === */
 main {
-    max-width: 800px; /* Maximale Breite für Lesbarkeit */
-    margin: 2rem auto; /* Zentriert */
+    max-width: 850px;
+    margin: 2rem auto;
     padding: 0 1rem;
 }
 
 /* === Card (Container für Abschnitte) === */
 .card {
-    background: white;
-    border-radius: 12px; /* Abgerundete Ecken */
+    background: var(--bg-white);
+    border-radius: 14px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Leichter Schatten */
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-light);
 }
 
 .card h2 {
     font-size: 1.3rem;
+    font-weight: 600;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #f0f0f0; /* Trennlinie unter Titel */
+    border-bottom: 2px solid var(--border-light);
+    color: var(--text-dark);
+}
+
+/* === Trainingsdaten-Status Banner === */
+.training-status {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.training-status .status-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.training-status .status-count {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+}
+
+.training-status.has-data {
+    border-left: 4px solid var(--accent-orange);
+}
+
+.training-status.no-data {
+    border-left: 4px solid var(--border-medium);
 }
 
 /* === Formular === */
@@ -63,9 +119,10 @@ main {
 
 .form-group label {
     display: block;
-    font-weight: 600; /* Fett für Labels */
+    font-weight: 500;
     margin-bottom: 0.3rem;
     font-size: 0.9rem;
+    color: var(--text-dark);
 }
 
 .form-group input[type="text"],
@@ -73,25 +130,26 @@ main {
 .form-group select,
 .form-group input[type="file"] {
     width: 100%;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 10px;
     font-size: 0.95rem;
-    transition: border-color 0.2s; /* Sanfter Übergang bei Fokus */
+    font-family: inherit;
+    background-color: var(--bg-white);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Fokus-Effekt: blauer Rand beim Klicken */
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #4a90d9; /* Blauer Rand */
-    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.15); /* Blauer Glow */
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.15);
 }
 
 /* === Checkbox-Gruppe (Consent) === */
 .checkbox-group {
     display: flex;
-    align-items: flex-start; /* Oben ausrichten */
+    align-items: flex-start;
     gap: 0.5rem;
 }
 
@@ -100,130 +158,197 @@ main {
     width: 18px;
     height: 18px;
     cursor: pointer;
+    accent-color: var(--accent-orange);
 }
 
 .checkbox-group label {
-    font-weight: normal; /* Nicht fett für Checkbox-Label */
+    font-weight: normal;
     cursor: pointer;
 }
 
 /* === Buttons === */
 .btn-primary {
-    background-color: #27ae60; /* Grün (passend zu Erfolgs-Posts) */
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
     color: white;
     border: none;
     padding: 0.7rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: opacity 0.2s, transform 0.1s;
     width: 100%;
     margin-top: 0.5rem;
 }
 
 .btn-primary:hover {
-    background-color: #219a52; /* Dunkleres Grün beim Hover */
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--bg-white);
+    color: var(--text-dark);
+    border: 1px solid var(--border-medium);
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-light);
+}
+
+/* === Generate Button (pro Post) === */
+.btn-generate {
+    background: linear-gradient(135deg, var(--gradient-end), var(--accent-pink));
+    color: white;
+    border: none;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.btn-generate:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.btn-generate:disabled {
+    opacity: 0.5;
+    cursor: wait;
+    transform: none;
 }
 
 /* === Feedback-Nachricht === */
 .message {
     margin-top: 1rem;
-    padding: 0.8rem;
-    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .message.success {
-    background-color: #d4edda; /* Hellgrün */
-    color: #155724;
+    background-color: var(--success-bg);
+    color: var(--success-text);
     border: 1px solid #c3e6cb;
 }
 
 .message.error {
-    background-color: #f8d7da; /* Hellrot */
-    color: #721c24;
+    background-color: var(--error-bg);
+    color: var(--error-text);
     border: 1px solid #f5c6cb;
 }
 
 .hidden {
-    display: none; /* Versteckt Elemente */
+    display: none;
 }
 
 /* === Post-Liste === */
 .post-item {
     padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
     margin-bottom: 0.8rem;
     display: flex;
-    justify-content: space-between; /* Inhalt links, Aktionen rechts */
+    justify-content: space-between;
     align-items: center;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 .post-item:hover {
-    background-color: #f9f9f9; /* Leichter Hover-Effekt */
+    background-color: var(--bg-light);
+    box-shadow: var(--shadow);
 }
 
-/* Linker Teil: Post-Infos */
 .post-info h3 {
     font-size: 1rem;
+    font-weight: 600;
     margin-bottom: 0.2rem;
+    color: var(--text-dark);
 }
 
 .post-info p {
     font-size: 0.85rem;
-    color: #666; /* Graue Zusatzinfos */
+    color: var(--text-medium);
 }
 
-/* Rechter Teil: Status-Badge */
+/* Caption-Vorschau im Post */
+.post-caption-preview {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    margin-top: 0.3rem;
+    font-style: italic;
+    max-width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Status Badges */
 .status-badge {
     padding: 0.3rem 0.8rem;
-    border-radius: 20px; /* Pillenform */
-    font-size: 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-/* Farben je nach Status */
 .status-draft {
-    background-color: #fff3cd; /* Gelb */
+    background-color: #fff3cd;
     color: #856404;
 }
 
 .status-ready {
-    background-color: #d4edda; /* Grün */
-    color: #155724;
+    background-color: var(--success-bg);
+    color: var(--success-text);
 }
 
 .status-published {
-    background-color: #cce5ff; /* Blau */
-    color: #004085;
+    background-color: #e8daef;
+    color: var(--gradient-end);
 }
 
-/* === Post-Aktionen (Bearbeiten, Löschen) === */
+/* === Post-Aktionen === */
 .post-actions {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .btn-small {
     padding: 0.3rem 0.6rem;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--border-medium);
+    background: var(--bg-white);
     font-size: 0.8rem;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .btn-small:hover {
-    background-color: #f0f0f0;
+    background-color: var(--bg-light);
 }
 
 .btn-delete {
-    color: #dc3545; /* Rot für Löschen */
+    color: #dc3545;
     border-color: #dc3545;
 }
 
@@ -236,12 +361,192 @@ main {
 .empty-state {
     text-align: center;
     padding: 2rem;
-    color: #999;
+    color: var(--text-light);
 }
 
 /* === Loading === */
 .loading {
     text-align: center;
-    color: #999;
+    color: var(--text-light);
     padding: 1rem;
+}
+
+/* === Modal === */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(45, 27, 105, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    background: var(--bg-white);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(45, 27, 105, 0.25);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--text-medium);
+    padding: 0.3rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+    background-color: var(--bg-light);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.modal-footer .btn-primary {
+    width: auto;
+    margin-top: 0;
+}
+
+/* === Provider Info (im Modal) === */
+.provider-info {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: var(--bg-light);
+    color: var(--text-medium);
+    display: flex;
+    gap: 1rem;
+}
+
+/* === Generated Section (im Modal) === */
+.generated-section {
+    margin-bottom: 1.2rem;
+}
+
+.generated-section h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.generated-section label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    color: var(--text-medium);
+}
+
+.generated-section textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.generated-section textarea:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.15);
+}
+
+/* === Spinner Animation === */
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === Responsive Design === */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .post-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+
+    .post-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+    }
+
+    .modal-footer .btn-primary,
+    .modal-footer .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
 }
