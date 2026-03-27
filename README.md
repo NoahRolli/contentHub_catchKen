@@ -2,32 +2,33 @@
 
 AI-powered social media content planner for Swiss driving schools. Automates content generation for Instagram & TikTok using local LLMs, featuring calendar-based scheduling, RSS-powered news posts, theory content, student success stories, and review highlights.
 
-**Work in Progress – Phase 3 complete**
+**Work in Progress – Phase 7 complete**
 
----
+-----
 
 ## Demo
 
 > *Screenshots coming soon*
 
----
+-----
 
 ## Tech Stack
 
-| Component | Technology |
-|---|---|
-| Backend | Python 3.13 · FastAPI · SQLAlchemy · SQLite |
-| Frontend (MVP) | HTML · CSS · JavaScript |
-| Frontend (planned) | React |
-| AI | Ollama local (OpenAI as fallback) — switchable via `.env` |
-| HTTP Client | httpx (async, for LLM communication) |
-| Auth | Passlib · bcrypt |
-| CI/CD | GitHub Actions (ruff linting · pytest · auto-docs) |
-| Containerization | Docker · docker-compose |
+|Component         |Technology                                               |
+|------------------|---------------------------------------------------------|
+|Backend           |Python 3.13 · FastAPI · SQLAlchemy · SQLite              |
+|Frontend (MVP)    |HTML · CSS · JavaScript                                  |
+|Frontend (planned)|React                                                    |
+|AI                |Ollama local (OpenAI as fallback) — switchable via `.env`|
+|HTTP Client       |httpx (async, for LLM communication)                     |
+|Auth              |Passlib · bcrypt                                         |
+|CI/CD             |GitHub Actions (ruff linting · pytest · auto-docs)       |
+|Containerization  |Docker · docker-compose                                  |
 
----
+-----
 
 ## Project Structure
+
 ```
 catchKen/
 ├── app/
@@ -50,11 +51,13 @@ catchKen/
 │   │
 │   ├── schemas/                   # Pydantic request/response models
 │   │   ├── student_success.py     # Success post + LLM generation schemas
-│   │   └── training_data.py       # Training data upload schemas
+│   │   ├── training_data.py       # Training data upload schemas
+│   │   └── scheduled_post.py      # Calendar scheduling schemas
 │   │
 │   ├── routers/                   # API endpoints
 │   │   ├── student_success.py     # CRUD + LLM generate for success posts
-│   │   └── training_data.py       # Training data upload & management
+│   │   ├── training_data.py       # Training data upload & management
+│   │   └── scheduled_post.py      # Calendar CRUD + drag-drop move
 │   │
 │   ├── services/                  # Business logic
 │   │   └── llm/                   # LLM integration
@@ -69,11 +72,16 @@ catchKen/
 │
 ├── frontend/
 │   ├── static/
-│   │   ├── css/style.css          # Main stylesheet
-│   │   ├── js/app.js              # Frontend logic
+│   │   ├── css/
+│   │   │   ├── style.css          # Main stylesheet (catchKen gradient theme)
+│   │   │   └── calendar.css       # Calendar-specific styles
+│   │   ├── js/
+│   │   │   ├── app.js             # Posts page logic
+│   │   │   └── calendar.js        # Calendar logic + drag & drop
 │   │   └── img/
 │   └── templates/
-│       └── index.html             # Main page with form & post list
+│       ├── index.html             # Posts page with form & list
+│       └── calendar.html          # Calendar view (week/2week/month)
 │
 ├── scripts/
 │   └── generate_docs.py           # Auto-documentation generator
@@ -96,7 +104,7 @@ catchKen/
 └── README.md
 ```
 
----
+-----
 
 ## Getting Started
 
@@ -107,6 +115,7 @@ catchKen/
 - [Ollama](https://ollama.ai) (for local LLM generation)
 
 ### Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/NoahRolli/contentHub_catchKen.git
@@ -132,21 +141,24 @@ uvicorn app.main:app --reload
 
 ### Access
 
-- **App:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- **API Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Health Check:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+- **App:** <http://127.0.0.1:8000>
+- **Calendar:** <http://127.0.0.1:8000/calendar>
+- **API Docs:** <http://127.0.0.1:8000/docs>
+- **Health Check:** <http://127.0.0.1:8000/health>
 
----
+-----
 
 ## Features
 
 ### Four Content Types
-- 🟢 **Success Posts** – Passed driving students with image, caption & hashtags
-- 🔴 **News Posts** – Auto-generated from Swiss RSS feeds with safety tips
-- 🔵 **Theory Posts** – Swiss driving theory content with quizzes
-- 🟡 **Reviews** – Google Reviews repurposed as social media content
+
+- **Success Posts** – Passed driving students with image, caption & hashtags
+- **News Posts** – Auto-generated from Swiss RSS feeds with safety tips
+- **Theory Posts** – Swiss driving theory content with quizzes
+- **Reviews** – Google Reviews repurposed as social media content
 
 ### LLM Content Generation (Phase 3)
+
 - **Two generation modes:**
   - **Generic mode** – LLM generates captions from a standard prompt when no training data exists
   - **Few-shot mode** – LLM imitates the style of real posts when training data is uploaded
@@ -155,19 +167,24 @@ uvicorn app.main:app --reload
 - **Editorial control** – Generated content is previewed before saving, admin can edit before publishing
 
 ### Training Data System
+
 - Upload real Instagram/TikTok posts as few-shot examples
 - Import from Instagram JSON export (official Meta download)
 - Bulk upload via API
 - Separate training data per platform (Instagram vs TikTok) and content type
 - Stats endpoint to monitor training data coverage
 
-### Planning System
-- Calendar view (week / 2 weeks / month)
-- Drag & drop scheduling
-- Status workflow: `DRAFT` → `READY` → `PUBLISHED`
-- Sidebar with unplanned content
+### Calendar & Scheduling (Phase 7)
+
+- **Three views** – Week, 2-week, and month view (switchable)
+- **Drag & drop** – Move posts between days by dragging
+- **Color-coded** content types (success=green, news=red, theory=blue, review=yellow)
+- **Quick entry** – Click any day to create a new scheduled post
+- **Status workflow** – `DRAFT` → `READY` → `PUBLISHED`
+- **Navigation** between Posts page and Calendar page
 
 ### Export
+
 - ZIP download with CSV schedule, images, captions & checklist
 - No auto-posting in MVP – full editorial control
 
@@ -176,12 +193,12 @@ uvicorn app.main:app --reload
 - [x] Project structure with `app/core/` architecture
 - [x] FastAPI server with health check
 - [x] Config, database, security foundation
-- [x] All 8 database models (User, StudentSuccessPost, TrainingPost, ContentSource, NewsItem, ContentIdea, ScheduledPost, Asset)
+- [x] All 8 database models
 - [x] Pydantic schemas for validation
 - [x] Success posts CRUD (create, read, update, delete)
 - [x] Image upload to SSD via symlink
 - [x] Consent validation (required for student images)
-- [x] Frontend form with post list
+- [x] Frontend with catchKen gradient design
 - [x] CI pipeline (ruff linting + pytest)
 - [x] Auto-generated documentation
 - [x] Docker setup (Dockerfile + docker-compose)
@@ -192,28 +209,32 @@ uvicorn app.main:app --reload
 - [x] Instagram JSON import for training data
 - [x] Content generation endpoint (Instagram + TikTok)
 - [x] Apply-generated endpoint (save after review)
+- [x] Calendar view (week / 2-week / month)
+- [x] Drag & drop scheduling
+- [x] Calendar CRUD with range query
 - [ ] Prompt tuning (hashtag separation, quote removal)
 - [ ] Theory post generation
 - [ ] RSS news scanning & filtering
 - [ ] Google Reviews integration
-- [ ] Calendar view with drag & drop
 - [ ] ZIP export
 - [ ] React frontend migration
 
----
+-----
 
 ## Content Pipeline
+
 ```mermaid
 graph LR
-    A[📥 Content Source] --> B[⚙️ Processing]
-    B --> C[🤖 LLM Generation]
-    C --> D[📝 DRAFT]
-    D --> E[👀 Admin Review]
-    E --> F[✅ READY]
-    F --> G[📤 PUBLISHED]
+    A[Content Source] --> B[Processing]
+    B --> C[LLM Generation]
+    C --> D[DRAFT]
+    D --> E[Admin Review]
+    E --> F[READY]
+    F --> G[PUBLISHED]
 ```
 
 ### LLM Generation Flow
+
 ```mermaid
 graph TD
     A[Success Post Created] --> B{Training Data?}
@@ -228,51 +249,64 @@ graph TD
     H --> I[Save to Post]
 ```
 
-*Detailed diagrams: [docs/content-pipeline.md](docs/content-pipeline.md)*
+*Detailed diagrams: <docs/content-pipeline.md>*
 
----
+-----
 
 ## API Endpoints
 
 ### Success Posts
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/success/` | Create new success post |
-| GET | `/api/success/` | List all success posts |
-| GET | `/api/success/{id}` | Get single post |
-| PUT | `/api/success/{id}` | Update post |
-| DELETE | `/api/success/{id}` | Delete post |
-| POST | `/api/success/{id}/generate` | Generate captions via LLM |
-| POST | `/api/success/{id}/apply-generated` | Save generated content |
+
+|Method|Endpoint                           |Description              |
+|------|-----------------------------------|-------------------------|
+|POST  |`/api/success/`                    |Create new success post  |
+|GET   |`/api/success/`                    |List all success posts   |
+|GET   |`/api/success/{id}`                |Get single post          |
+|PUT   |`/api/success/{id}`                |Update post              |
+|DELETE|`/api/success/{id}`                |Delete post              |
+|POST  |`/api/success/{id}/generate`       |Generate captions via LLM|
+|POST  |`/api/success/{id}/apply-generated`|Save generated content   |
 
 ### Training Data
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/training-data/` | Create single training post |
-| POST | `/api/training-data/bulk` | Bulk upload training posts |
-| POST | `/api/training-data/import-instagram` | Import Instagram JSON export |
-| GET | `/api/training-data/` | List training posts |
-| GET | `/api/training-data/stats` | Training data statistics |
-| DELETE | `/api/training-data/{id}` | Delete single training post |
-| DELETE | `/api/training-data/` | Delete all (with optional filter) |
 
----
+|Method|Endpoint                             |Description                      |
+|------|-------------------------------------|---------------------------------|
+|POST  |`/api/training-data/`                |Create single training post      |
+|POST  |`/api/training-data/bulk`            |Bulk upload training posts       |
+|POST  |`/api/training-data/import-instagram`|Import Instagram JSON export     |
+|GET   |`/api/training-data/`                |List training posts              |
+|GET   |`/api/training-data/stats`           |Training data statistics         |
+|DELETE|`/api/training-data/{id}`            |Delete single training post      |
+|DELETE|`/api/training-data/`                |Delete all (with optional filter)|
+
+### Calendar
+
+|Method|Endpoint                 |Description              |
+|------|-------------------------|-------------------------|
+|POST  |`/api/calendar/`         |Create scheduled post    |
+|GET   |`/api/calendar/range`    |Get posts in date range  |
+|GET   |`/api/calendar/{id}`     |Get single entry         |
+|PUT   |`/api/calendar/{id}`     |Update entry             |
+|PATCH |`/api/calendar/{id}/move`|Drag & drop (change date)|
+|DELETE|`/api/calendar/{id}`     |Delete entry             |
+
+-----
 
 ## Roadmap
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1 | Foundation & project structure | ✅ Complete |
-| 2 | Success posts CRUD & frontend | ✅ Complete |
-| 3 | LLM integration (Ollama) | ✅ Complete |
-| 4 | Theory posts | ⏳ Planned |
-| 5 | News posts (RSS) | ⏳ Planned |
-| 6 | Reviews | ⏳ Planned |
-| 7 | Calendar & scheduling | ⏳ Planned |
-| 8 | Export & polish | ⏳ Planned |
-| 9 | React migration (optional) | ⏳ Planned |
+|Phase|Description                   |Status |
+|-----|------------------------------|-------|
+|1    |Foundation & project structure|Done   |
+|2    |Success posts CRUD & frontend |Done   |
+|3    |LLM integration (Ollama)      |Done   |
+|4    |Theory posts                  |Planned|
+|5    |News posts (RSS)              |Planned|
+|6    |Reviews                       |Planned|
+|7    |Calendar & scheduling         |Done   |
+|8    |Export & polish               |Planned|
+|9    |React migration (optional)    |Planned|
 
----
+-----
 
 ## Security
 
@@ -283,37 +317,38 @@ graph TD
 - Consent required for student images
 - No full article reproduction (LLM summaries only)
 
----
+-----
 
 ## CI/CD
 
 Automated pipelines run on every push to `main`:
+
 - **Linting** with [ruff](https://github.com/astral-sh/ruff)
 - **Tests** with pytest (coming soon)
 - **Documentation** auto-generated from code
 
----
+-----
 
 ## Documentation
 
-- **API Docs (live):** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Content Pipeline:** [docs/content-pipeline.md](docs/content-pipeline.md)
-- **Auto-generated:** [docs/auto-generated.md](docs/auto-generated.md)
+- **API Docs (live):** <http://127.0.0.1:8000/docs>
+- **Content Pipeline:** <docs/content-pipeline.md>
+- **Auto-generated:** <docs/auto-generated.md>
 
----
+-----
 
 ## Versioning
 
 This project follows [Semantic Versioning](https://semver.org/):
 `v0.1.0` → `v0.2.0` → `v1.0.0`
 
----
+-----
 
 ## License
 
 *Not yet defined.*
 
----
+-----
 
 ## Author
 
