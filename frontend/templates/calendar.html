@@ -1,0 +1,97 @@
+<!-- calendar.html – Kalender-Ansicht des catchKen Content Hub -->
+<!-- Zeigt geplante Posts in Wochen-/2-Wochen-/Monatsansicht -->
+<!-- Drag & Drop zum Verschieben von Posts zwischen Tagen -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>catchKen – Kalender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/calendar.css">
+</head>
+<body>
+    <!-- === Header === -->
+    <header>
+        <h1>catchKen Content Hub</h1>
+        <nav class="header-nav">
+            <a href="/">Posts</a>
+            <a href="/calendar" class="active">Kalender</a>
+        </nav>
+    </header>
+
+    <main class="calendar-main">
+        <!-- === Toolbar: Navigation + View-Switcher === -->
+        <div class="calendar-toolbar">
+            <div class="calendar-nav">
+                <button class="btn-nav" id="btn-prev" title="Zurück">&larr;</button>
+                <h2 id="calendar-title">März 2026</h2>
+                <button class="btn-nav" id="btn-next" title="Vor">&rarr;</button>
+                <button class="btn-nav btn-today" id="btn-today">Heute</button>
+            </div>
+            <div class="view-switcher">
+                <button class="btn-view active" data-view="week">Woche</button>
+                <button class="btn-view" data-view="twoweek">2 Wochen</button>
+                <button class="btn-view" data-view="month">Monat</button>
+            </div>
+        </div>
+
+        <!-- === Kalender Grid === -->
+        <div class="calendar-header" id="calendar-header">
+            <!-- Wochentage werden per JS gesetzt -->
+        </div>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- Tages-Zellen werden per JS generiert -->
+        </div>
+    </main>
+
+    <!-- === Modal: Neuer Kalender-Eintrag === -->
+    <div id="entry-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeEntryModal()"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="entry-modal-title">Neuer Eintrag</h3>
+                <button class="modal-close" onclick="closeEntryModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="entry-type">Content-Typ</label>
+                    <select id="entry-type">
+                        <option value="success">Erfolgs-Post</option>
+                        <option value="news">News</option>
+                        <option value="theory">Theorie</option>
+                        <option value="review">Review</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="entry-date">Datum</label>
+                    <input type="date" id="entry-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="entry-time">Uhrzeit (optional)</label>
+                    <input type="time" id="entry-time">
+                </div>
+                <div class="form-group">
+                    <label for="entry-platform">Plattform</label>
+                    <select id="entry-platform">
+                        <option value="both">Instagram + TikTok</option>
+                        <option value="instagram">Nur Instagram</option>
+                        <option value="tiktok">Nur TikTok</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="entry-notes">Notizen (optional)</label>
+                    <textarea id="entry-notes" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEntryModal()">Abbrechen</button>
+                <button class="btn-primary" id="btn-save-entry">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/calendar.js"></script>
+</body>
+</html>

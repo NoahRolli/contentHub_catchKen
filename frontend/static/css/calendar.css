@@ -1,0 +1,296 @@
+/* calendar.css – Kalender-spezifische Styles */
+/* Nutzt CSS-Variablen aus style.css für Konsistenz */
+
+/* === Kalender Layout === */
+.calendar-main {
+    max-width: 1100px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
+
+/* === Header Navigation === */
+.header-nav {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.header-nav a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+    color: white;
+    border-bottom-color: var(--accent-orange);
+}
+
+/* === Toolbar === */
+.calendar-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.calendar-nav h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    min-width: 180px;
+    text-align: center;
+}
+
+.btn-nav {
+    background: var(--bg-white);
+    border: 1px solid var(--border-medium);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: background-color 0.2s;
+}
+
+.btn-nav:hover {
+    background-color: var(--bg-light);
+}
+
+.btn-today {
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* === View Switcher === */
+.view-switcher {
+    display: flex;
+    border: 1px solid var(--border-medium);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.btn-view {
+    background: var(--bg-white);
+    border: none;
+    border-right: 1px solid var(--border-medium);
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-medium);
+    transition: all 0.2s;
+}
+
+.btn-view:last-child {
+    border-right: none;
+}
+
+.btn-view:hover {
+    background-color: var(--bg-light);
+}
+
+.btn-view.active {
+    background: linear-gradient(135deg, var(--gradient-end), var(--accent-pink));
+    color: white;
+}
+
+/* === Kalender Header (Wochentage) === */
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    margin-bottom: 1px;
+}
+
+.calendar-header .day-name {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-medium);
+    padding: 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* === Kalender Grid === */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* === Einzelne Tages-Zelle === */
+.calendar-day {
+    background: var(--bg-white);
+    min-height: 90px;
+    padding: 0.4rem;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.calendar-day:hover {
+    background-color: var(--bg-light);
+}
+
+.calendar-day.today {
+    background-color: #fef9f0;
+}
+
+.calendar-day.other-month {
+    opacity: 0.4;
+}
+
+/* Drag-over Zustand */
+.calendar-day.drag-over {
+    background-color: rgba(232, 67, 147, 0.1);
+    outline: 2px dashed var(--accent-pink);
+    outline-offset: -2px;
+}
+
+/* Datumszahl oben links */
+.day-number {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-medium);
+    margin-bottom: 0.3rem;
+}
+
+.today .day-number {
+    color: var(--bg-white);
+    background: var(--accent-orange);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Plus-Button zum Erstellen */
+.day-add {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border-light);
+    color: var(--text-light);
+    font-size: 0.85rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day:hover .day-add {
+    opacity: 1;
+}
+
+.day-add:hover {
+    background: var(--accent-orange);
+    color: white;
+}
+
+/* === Post-Karte im Kalender === */
+.calendar-post {
+    padding: 0.25rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+    cursor: grab;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform 0.1s, box-shadow 0.1s;
+    border-left: 3px solid;
+}
+
+.calendar-post:active {
+    cursor: grabbing;
+}
+
+.calendar-post.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+/* Content-Type Farben */
+.calendar-post.type-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left-color: #28a745;
+}
+
+.calendar-post.type-news {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-left-color: #dc3545;
+}
+
+.calendar-post.type-theory {
+    background-color: #cce5ff;
+    color: #004085;
+    border-left-color: #007bff;
+}
+
+.calendar-post.type-review {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left-color: #ffc107;
+}
+
+/* === Modal Variante (kleiner) === */
+.modal-small {
+    max-width: 450px;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .calendar-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .calendar-nav {
+        justify-content: center;
+    }
+
+    .view-switcher {
+        justify-content: center;
+    }
+
+    .calendar-day {
+        min-height: 60px;
+    }
+
+    .calendar-post {
+        font-size: 0.65rem;
+    }
+}
