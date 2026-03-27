@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 18.03.2026 17:30 via GitHub Actions
+> Automatisch generiert am 27.03.2026 21:41 via GitHub Actions
 
 ---
 
@@ -10,6 +10,7 @@
 | ------- | ---- | -------- | ------------ |
 | `GET` | `/` | `root` | Startseite – zeigt das Frontend mit Formular und Post-Liste. |
 | `GET` | `/health` | `health_check` | Wird genutzt um zu prüfen ob der Server läuft. |
+| `GET` | `/calendar` | `calendar_page` | Kalender-Ansicht für die Content-Planung. |
 
 ---
 
