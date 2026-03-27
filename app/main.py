@@ -10,6 +10,8 @@ from app.core.database import engine, Base  # DB-Engine und Basisklasse
 import app.models  # Alle Modelle laden (damit Base sie kennt)
 from app.routers.student_success import router as success_router  # Erfolgs-Posts Endpunkte
 from app.routers.training_data import router as training_router  # Trainingsdaten Endpunkte
+from app.routers.scheduled_post import router as calendar_router
+
 
 
 # Datenbank-Tabellen erstellen (wenn sie noch nicht existieren)
@@ -36,6 +38,7 @@ templates = Jinja2Templates(directory="frontend/templates")
 # === Router registrieren ===
 app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
 app.include_router(training_router)  # Trainingsdaten unter /api/training-data/
+app.include_router(calendar_router) 
 
 
 # === API Endpunkte (Routes) ===
@@ -51,3 +54,8 @@ async def health_check():
     """Wird genutzt um zu prüfen ob der Server läuft.
     Nützlich für Monitoring und spätere Deployment-Checks."""
     return {"status": "healthy"}
+
+@app.get("/calendar")
+async def calendar_page(request: Request):
+    """Kalender-Ansicht für die Content-Planung."""
+    return templates.TemplateResponse("calendar.html", {"request": request})
