@@ -289,9 +289,7 @@ async def generate_content(
     # --- 7. Ergebnis zurückgeben (noch NICHT in DB gespeichert!) ---
     return GenerateContentResponse(
         instagram_caption=ig_result["caption"],
-        instagram_hashtags=ig_result["hashtags"],
         tiktok_description=tt_result["description"],
-        tiktok_hashtags=tt_result["hashtags"],
         provider=provider.get_provider_name(),
         used_training_data=len(training_examples_ig) > 0 or len(training_examples_tt) > 0,
         training_examples_count=max(len(training_examples_ig), len(training_examples_tt))
@@ -304,28 +302,25 @@ async def generate_content(
 @router.post("/{post_id}/apply-generated", response_model=StudentSuccessResponse)
 async def apply_generated_content(
     post_id: int,
-    caption: str = Form(..., description="Instagram Caption (vom Admin geprüft/angepasst)"),
-    hashtags: str = Form(None, description="Instagram Hashtags"),
-    story_text: str = Form(None, description="TikTok-Beschreibung oder Story-Text"),
+    caption: str = Form(..., description="Instagram Post-Text (Caption + Hashtags, vom Admin geprüft)"),
+    story_text: str = Form(None, description="TikTok-Beschreibung inkl. Hashtags"),
     db: Session = Depends(get_db),
 ):
     """Speichert den generierten (und ggf. angepassten) Content auf dem Post.
-    
-    Separater Endpoint damit der Admin den Text erst prüfen kann
-    bevor er gespeichert wird. So behalten wir die volle Editorial Control.
+
+    Caption enthält den vollständigen Instagram-Text inkl. Hashtags.
     """
-    
+
     post = db.query(StudentSuccessPost).filter(StudentSuccessPost.id == post_id).first()
-    
+
     if not post:
         raise HTTPException(status_code=404, detail=f"Erfolgs-Post mit ID {post_id} nicht gefunden")
-    
-    # Generierte Texte auf dem Post speichern
+
+    # Generierten Text speichern (Caption = voller Post-Text, Hashtags separat nicht mehr nötig)
     post.caption = caption
-    post.hashtags = hashtags
-    post.story_text = story_text  # TikTok-Beschreibung kommt hier rein
-    
+    post.story_text = story_text
+
     db.commit()
     db.refresh(post)
-    
+
     return post

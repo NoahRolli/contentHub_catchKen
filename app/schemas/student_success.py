@@ -97,15 +97,13 @@ class GenerateContentRequest(BaseModel):
 
 
 class GenerateContentResponse(BaseModel):
-    """Schema für die generierte Caption + TikTok-Beschreibung.
-    
-    Wird zurückgegeben BEVOR der Post gespeichert wird,
-    damit der Admin den generierten Text prüfen und anpassen kann.
+    """Schema für den generierten Content (Instagram + TikTok).
+
+    Caption und Hashtags sind in einem Text zusammengefasst —
+    kein separates Hashtag-Feld mehr.
     """
-    instagram_caption: str = Field(description="Generierte Instagram Caption")
-    instagram_hashtags: str = Field(description="Generierte Instagram Hashtags")
-    tiktok_description: str = Field(description="Generierte TikTok-Beschreibung")
-    tiktok_hashtags: str = Field(description="Generierte TikTok Hashtags")
+    instagram_caption: str = Field(description="Fertiger Instagram Post-Text inkl. Hashtags")
+    tiktok_description: str = Field(description="Fertige TikTok-Beschreibung inkl. Hashtags")
     provider: str = Field(description="Welcher LLM Provider wurde genutzt (ollama/openai)")
     used_training_data: bool = Field(description="Wurden Trainingsdaten für Few-Shot genutzt?")
     training_examples_count: int = Field(description="Anzahl verwendeter Trainingsbeispiele")
