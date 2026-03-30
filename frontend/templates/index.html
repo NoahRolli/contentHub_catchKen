@@ -1,25 +1,27 @@
-<!-- index.html – Startseite des catchKen Content Hub -->
-<!-- Zeigt eine Übersicht aller Erfolgs-Posts und ein Formular zum Erstellen -->
-<!-- Phase 3: Generate-Button pro Post für LLM Caption-Generierung -->
+<!-- index.html – Posts-Seite des catchKen Content Hub -->
+<!-- Formular zum Erstellen und Liste aller Posts -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>catchKen Content Hub</title>
-    <!-- Google Font: Poppins für modernes Aussehen -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Eigenes CSS laden -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <!-- === Header mit catchKen Gradient === -->
+    <!-- === Header === -->
     <header>
-        <h1>catchKen Content Hub</h1>
-        <p>Social Media Planner für Fahrschulen</p>
+        <div class="header-top">
+            <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
+            <div class="header-text">
+                <h1>catchKen Content Hub</h1>
+                <p>Social Media Planner</p>
+            </div>
+        </div>
         <nav class="header-nav">
-            <a href="/" class="active">Posts</a>
-            <a href="/calendar">Kalender</a>
+            <a href="/" class="btn-nav-link active">Posts</a>
+            <a href="/calendar" class="btn-nav-link">Kalender</a>
         </nav>
     </header>
 
@@ -29,9 +31,9 @@
             <!-- Wird per JavaScript gefüllt -->
         </section>
 
-        <!-- === Formular: Neuer Erfolgs-Post === -->
+        <!-- === Formular: Neuer Post === -->
         <section class="card">
-            <h2>Neuer Erfolgs-Post</h2>
+            <h2>Post: Prüfung bestanden</h2>
             <form id="success-form" enctype="multipart/form-data">
                 
                 <!-- Vorname (optional) -->
@@ -82,17 +84,16 @@
             <div id="form-message" class="message hidden"></div>
         </section>
 
-        <!-- === Liste der Erfolgs-Posts === -->
+        <!-- === Liste der Posts === -->
         <section class="card">
-            <h2>Alle Erfolgs-Posts</h2>
-            <!-- Wird per JavaScript gefüllt -->
+            <h2>Alle Posts</h2>
             <div id="posts-list">
                 <p class="loading">Lade Posts...</p>
             </div>
         </section>
     </main>
 
-    <!-- === Modal: Generierte Captions anzeigen === -->
+    <!-- === Modal: Generierte Captions === -->
     <div id="generate-modal" class="modal hidden">
         <div class="modal-backdrop" onclick="closeModal()"></div>
         <div class="modal-content">
@@ -101,25 +102,16 @@
                 <button class="modal-close" onclick="closeModal()">&#x2715;</button>
             </div>
             <div class="modal-body">
-                <!-- Provider Info -->
                 <div id="modal-provider-info" class="provider-info"></div>
 
-                <!-- Instagram -->
                 <div class="generated-section">
                     <h4>Instagram</h4>
-                    <label>Caption</label>
-                    <textarea id="modal-ig-caption" rows="4"></textarea>
-                    <label>Hashtags</label>
-                    <textarea id="modal-ig-hashtags" rows="2"></textarea>
+                    <textarea id="modal-ig-caption" rows="5"></textarea>
                 </div>
 
-                <!-- TikTok -->
                 <div class="generated-section">
                     <h4>TikTok</h4>
-                    <label>Beschreibung</label>
-                    <textarea id="modal-tt-description" rows="3"></textarea>
-                    <label>Hashtags</label>
-                    <textarea id="modal-tt-hashtags" rows="2"></textarea>
+                    <textarea id="modal-tt-description" rows="4"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -131,7 +123,6 @@
         </div>
     </div>
 
-    <!-- JavaScript laden -->
     <script src="/static/js/app.js"></script>
 </body>
 </html>

@@ -199,11 +199,9 @@ function openModal(postId, result) {
         }</span>
     `;
 
-    // Textfelder befüllen
+    // Textfelder befüllen — Caption enthält den vollständigen Text inkl. Hashtags
     document.getElementById("modal-ig-caption").value = result.instagram_caption;
-    document.getElementById("modal-ig-hashtags").value = result.instagram_hashtags;
     document.getElementById("modal-tt-description").value = result.tiktok_description;
-    document.getElementById("modal-tt-hashtags").value = result.tiktok_hashtags;
 
     // Modal einblenden
     document.getElementById("generate-modal").classList.remove("hidden");
@@ -228,15 +226,13 @@ document.addEventListener("keydown", function(event) {
 async function saveGenerated() {
     if (!currentGeneratePostId) return;
 
-    // Werte aus den Modal-Textfeldern holen (Admin kann sie bearbeitet haben)
+    // Werte aus den Modal-Textfeldern holen (direkt editierbar)
     const caption = document.getElementById("modal-ig-caption").value;
-    const hashtags = document.getElementById("modal-ig-hashtags").value;
     const storyText = document.getElementById("modal-tt-description").value;
 
     // FormData bauen für den Apply-Endpoint
     const formData = new FormData();
     formData.append("caption", caption);
-    if (hashtags) formData.append("hashtags", hashtags);
     if (storyText) formData.append("story_text", storyText);
 
     try {
