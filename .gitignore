@@ -10,8 +10,9 @@ __pycache__/
 dist/
 build/
 
-# Media (lives on SSD via symlink)
+# Media (SSD via symlink oder lokal)
 media/
+local_media/
 
 # Database
 *.db
