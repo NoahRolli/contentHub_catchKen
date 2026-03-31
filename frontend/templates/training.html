@@ -1,0 +1,117 @@
+<!-- training.html – Trainingsdaten-Verwaltung für alle Content-Typen -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>catchKen – Trainingsdaten</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
+            <div class="header-text">
+                <h1>catchKen Content Hub</h1>
+                <p>Social Media Planner</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="/" class="btn-nav-link">Posts</a>
+            <a href="/theory" class="btn-nav-link">Theorie</a>
+            <a href="/calendar" class="btn-nav-link">Kalender</a>
+            <a href="/training" class="btn-nav-link active">Training</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Statistik -->
+        <section class="card" id="training-stats"></section>
+
+        <!-- Manuell Trainingsdaten hinzufügen -->
+        <section class="card">
+            <h2>Trainingsdaten hinzufügen</h2>
+            <p style="font-size: 0.85rem; color: var(--text-medium); margin-bottom: 1rem;">
+                Echte Posts als Beispiel eingeben, damit der LLM den Style imitieren kann.
+            </p>
+            <form id="training-form">
+                <div class="form-group">
+                    <label for="train-platform">Plattform *</label>
+                    <select id="train-platform">
+                        <option value="instagram">Instagram</option>
+                        <option value="tiktok">TikTok</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="train-type">Content-Typ *</label>
+                    <select id="train-type">
+                        <option value="success">Prüfung bestanden</option>
+                        <option value="theory">Theorie</option>
+                        <option value="news">News</option>
+                        <option value="review">Review</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="train-caption">Caption / Beschreibung *</label>
+                    <textarea id="train-caption" rows="4" required
+                        placeholder="Den echten Post-Text hier einfügen..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="train-hashtags">Hashtags (optional)</label>
+                    <input type="text" id="train-hashtags" placeholder="#fahrschule #bestanden #catchken">
+                </div>
+                <button type="submit" class="btn-primary">Trainingsbeispiel speichern</button>
+            </form>
+            <div id="form-message" class="message hidden"></div>
+        </section>
+
+        <!-- Instagram JSON Import -->
+        <section class="card">
+            <h2>Instagram JSON Import</h2>
+            <p style="font-size: 0.85rem; color: var(--text-medium); margin-bottom: 1rem;">
+                Instagram-Export (JSON) hochladen um mehrere Posts auf einmal zu importieren.
+            </p>
+            <form id="import-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="import-type">Content-Typ</label>
+                    <select id="import-type">
+                        <option value="success">Prüfung bestanden</option>
+                        <option value="theory">Theorie</option>
+                        <option value="news">News</option>
+                        <option value="review">Review</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="import-file">JSON-Datei *</label>
+                    <input type="file" id="import-file" accept=".json" required>
+                </div>
+                <button type="submit" class="btn-primary">Importieren</button>
+            </form>
+            <div id="import-message" class="message hidden"></div>
+        </section>
+
+        <!-- Bestehende Trainingsdaten -->
+        <section class="card">
+            <h2>Gespeicherte Trainingsdaten</h2>
+            <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <select id="filter-platform" style="padding: 0.4rem; border-radius: 8px; border: 1px solid var(--border-medium); font-family: inherit;">
+                    <option value="">Alle Plattformen</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                </select>
+                <select id="filter-type" style="padding: 0.4rem; border-radius: 8px; border: 1px solid var(--border-medium); font-family: inherit;">
+                    <option value="">Alle Typen</option>
+                    <option value="success">Prüfung bestanden</option>
+                    <option value="theory">Theorie</option>
+                    <option value="news">News</option>
+                    <option value="review">Review</option>
+                </select>
+            </div>
+            <div id="training-list"><p class="loading">Lade Trainingsdaten...</p></div>
+        </section>
+    </main>
+
+    <script src="/static/js/training.js"></script>
+</body>
+</html>
