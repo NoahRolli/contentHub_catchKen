@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 27.03.2026 21:41 via GitHub Actions
+> Automatisch generiert am 31.03.2026 09:00 via GitHub Actions
 
 ---
 
@@ -66,7 +66,7 @@ Geplante Posts – das Herzstück des Kalenders.
 
 Erfolgs-Posts – bestandene Fahrschüler:innen als Social-Media-Content.
 
-**Felder:** `__tablename__`, `id`, `user_id`, `user`, `student_name`, `exam_date`, `category`, `image_path`, `consent_given`, `caption`, `hashtags`, `story_text`, `status`, `created_at`, `updated_at`
+**Felder:** `__tablename__`, `id`, `user_id`, `user`, `student_name`, `exam_date`, `category`, `image_path`, `image_paths`, `consent_given`, `details`, `caption`, `hashtags`, `story_text`, `status`, `created_at`, `updated_at`
 
 ---
 
