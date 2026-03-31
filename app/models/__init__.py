@@ -9,8 +9,9 @@ from app.models.news_item import NewsItem
 from app.models.content_idea import ContentIdea
 from app.models.scheduled_post import ScheduledPost
 from app.models.asset import Asset
+from app.models.theory_post import TheoryPost
 
-# Alle Modelle exportieren – so reicht ein "from app.models import User"
+# Alle Modelle exportieren
 __all__ = [
     "User",
     "StudentSuccessPost",
@@ -19,4 +20,5 @@ __all__ = [
     "ContentIdea",
     "ScheduledPost",
     "Asset",
+    "TheoryPost",
 ]
