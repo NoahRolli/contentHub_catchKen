@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 31.03.2026 09:00 via GitHub Actions
+> Automatisch generiert am 31.03.2026 12:19 via GitHub Actions
 
 ---
 
@@ -11,10 +11,12 @@
 | `GET` | `/` | `root` | Startseite – zeigt das Frontend mit Formular und Post-Liste. |
 | `GET` | `/health` | `health_check` | Wird genutzt um zu prüfen ob der Server läuft. |
 | `GET` | `/calendar` | `calendar_page` | Kalender-Ansicht für die Content-Planung. |
+| `GET` | `/theory` | `theory_page` | Theorie-Posts Seite. |
+| `GET` | `/training` | `training_page` | Trainingsdaten-Verwaltung. |
 
 ---
 
-## Datenbank-Modelle (10 Tabellen)
+## Datenbank-Modelle (11 Tabellen)
 
 ### Asset
 **Datei:** `app/models/asset.py`
@@ -67,6 +69,15 @@ Geplante Posts – das Herzstück des Kalenders.
 Erfolgs-Posts – bestandene Fahrschüler:innen als Social-Media-Content.
 
 **Felder:** `__tablename__`, `id`, `user_id`, `user`, `student_name`, `exam_date`, `category`, `image_path`, `image_paths`, `consent_given`, `details`, `caption`, `hashtags`, `story_text`, `status`, `created_at`, `updated_at`
+
+---
+
+### TheoryPost
+**Datei:** `app/models/theory_post.py`
+
+Theorie-Posts — Fahrschultheorie als Social-Media-Content.
+
+**Felder:** `__tablename__`, `id`, `topic`, `content`, `source`, `caption`, `story_text`, `status`, `created_at`, `updated_at`
 
 ---
 
