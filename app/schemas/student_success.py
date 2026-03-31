@@ -5,43 +5,23 @@ from pydantic import BaseModel, Field  # Basisklasse für Schemas
 from datetime import date, datetime  # Datum und Zeitstempel
 from typing import Optional  # Für optionale Felder
 class StudentSuccessCreate(BaseModel):
-    """Schema für das ERSTELLEN eines Erfolgs-Posts.
-    
-    Das sind die Felder die der Admin im Formular ausfüllt.
-    Das Bild wird separat hochgeladen (nicht als JSON).
-    """
-    
-    student_name: Optional[str] = Field(
-        None,  # Optional – nicht jeder will seinen Namen
-        description="Vorname des Schülers (optional)",
-        max_length=100
-    )
-    exam_date: date = Field(
-        ...,  # ... = Pflichtfeld
-        description="Datum der bestandenen Prüfung"
-    )
-    category: str = Field(
-        "B",  # Standardwert
-        description="Führerschein-Kategorie (z.B. B, A, A1)",
-        max_length=10
-    )
-    consent_given: bool = Field(
-        ...,  # Pflichtfeld – muss True sein
-        description="Einverständnis für Bildnutzung (PFLICHT)"
-    )
+    """Schema für das ERSTELLEN eines Erfolgs-Posts."""
+
+    student_name: Optional[str] = Field(None, max_length=100)
+    exam_date: date = Field(..., description="Datum der bestandenen Prüfung")
+    category: str = Field("B", max_length=10)
+    consent_given: bool = Field(..., description="Einverständnis Bildnutzung (Pflicht)")
+    details: Optional[str] = Field(None, max_length=500, description="Zusatzinfos für LLM")
 class StudentSuccessUpdate(BaseModel):
-    """Schema für das BEARBEITEN eines Erfolgs-Posts.
-    
-    Alle Felder sind optional – nur das was sich ändert wird mitgeschickt.
-    """
-    
+    """Schema für das BEARBEITEN — nur gesetzte Felder werden geändert."""
+
     student_name: Optional[str] = Field(None, max_length=100)
     exam_date: Optional[date] = None
     category: Optional[str] = Field(None, max_length=10)
-    caption: Optional[str] = None  # Generierte Caption bearbeiten
-    hashtags: Optional[str] = None  # Generierte Hashtags bearbeiten
-    story_text: Optional[str] = None  # Story-Text bearbeiten
-    status: Optional[str] = Field(None, pattern="^(draft|ready|published)$")  # Nur gültige Status
+    details: Optional[str] = Field(None, max_length=500)
+    caption: Optional[str] = None
+    story_text: Optional[str] = None
+    status: Optional[str] = Field(None, pattern="^(draft|ready|published)$")
 class StudentSuccessResponse(BaseModel):
     """Schema für die API-ANTWORT – was der Client zurückbekommt.
     
@@ -54,9 +34,10 @@ class StudentSuccessResponse(BaseModel):
     exam_date: date
     category: str
     image_path: Optional[str] = None
+    image_paths: Optional[list] = None
     consent_given: bool
+    details: Optional[str] = None
     caption: Optional[str] = None
-    hashtags: Optional[str] = None
     story_text: Optional[str] = None
     status: str
     created_at: Optional[datetime] = None

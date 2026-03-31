@@ -2,7 +2,7 @@
 # Speichert bestandene Fahrprüfungen als Social-Media-Content
 # Jeder Post enthält Schülerdaten, Bild und generierten Content
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date, ForeignKey, Text  # Spaltentypen
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date, ForeignKey, Text, JSON  # Spaltentypen
 from sqlalchemy.sql import func  # Für automatische Zeitstempel
 from sqlalchemy.orm import relationship  # Für Beziehungen zwischen Tabellen
 from app.core.database import Base  # Basisklasse für alle Modelle
@@ -49,13 +49,17 @@ class StudentSuccessPost(Base):
     category = Column(String, nullable=False, default="B")  # Führerschein-Kategorie (B, A, A1 etc.)
     
     # === Bild & Consent ===
-    image_path = Column(String, nullable=True)  # Pfad zum Bild (media/uploads/success/...)
-    consent_given = Column(Boolean, nullable=False)  # PFLICHT: Einverständnis für Bildnutzung
-    
+    image_path = Column(String, nullable=True)   # Erstes Bild (Rückwärtskompatibilität)
+    image_paths = Column(JSON, nullable=True)     # JSON-Liste für mehrere Bilder
+    consent_given = Column(Boolean, nullable=False)
+
+    # === Details für LLM ===
+    details = Column(Text, nullable=True)  # Zusatzinfos wie "beim ersten Versuch bestanden"
+
     # === Generierter Content ===
-    caption = Column(Text, nullable=True)  # LLM-generierte Caption (bearbeitbar)
-    hashtags = Column(String, nullable=True)  # LLM-generierte Hashtags (bearbeitbar)
-    story_text = Column(Text, nullable=True)  # Optionaler Instagram Story Text
+    caption = Column(Text, nullable=True)     # Instagram Post-Text inkl. Hashtags
+    hashtags = Column(String, nullable=True)  # Nicht mehr aktiv genutzt (für alte Posts)
+    story_text = Column(Text, nullable=True)  # TikTok-Beschreibung
     
     # === Status im Planungssystem ===
     status = Column(String, default="draft")  # draft → ready → published

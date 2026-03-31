@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates  # Rendert HTML-Templates
 from app.core.config import get_settings  # Unsere App-Einstellungen aus .env
 from app.core.database import engine, Base  # DB-Engine und Basisklasse
 import app.models  # Alle Modelle laden (damit Base sie kennt)
+import os
 from app.routers.student_success import router as success_router  # Erfolgs-Posts Endpunkte
 from app.routers.training_data import router as training_router  # Trainingsdaten Endpunkte
 from app.routers.scheduled_post import router as calendar_router
@@ -29,8 +30,12 @@ app = FastAPI(
 )
 
 # Statische Dateien verfügbar machen (CSS, JS, Bilder)
-# URL /static/css/style.css → Datei frontend/static/css/style.css
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+
+# Uploads als statische Dateien verfügbar machen (für Bild-Vorschauen im Browser)
+# Ordner wird erstellt falls noch nicht vorhanden
+os.makedirs("local_media/uploads", exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="local_media/uploads"), name="uploads")
 
 # Template-Engine konfigurieren – rendert HTML-Seiten mit dynamischen Daten
 templates = Jinja2Templates(directory="frontend/templates")

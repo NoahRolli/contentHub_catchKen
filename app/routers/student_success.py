@@ -3,7 +3,7 @@
 # Alle Endpunkte sind unter /api/success/ erreichbar
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form  # FastAPI-Werkzeuge
 from sqlalchemy.orm import Session  # Datenbank-Sitzung
-from typing import Optional  # Für optionale Parameter
+from typing import Optional, List  # Für optionale und Listen-Parameter
 from datetime import date  # Für Datumsfelder
 import shutil  # Für Dateioperationen (Bild-Upload)
 import os  # Für Pfad-Operationen
@@ -28,54 +28,47 @@ router = APIRouter(
 settings = get_settings()
 @router.post("/", response_model=StudentSuccessResponse)  # POST /api/success/
 async def create_success_post(
-    exam_date: date = Form(..., description="Prüfungsdatum"),  # Pflichtfeld
-    consent_given: bool = Form(..., description="Einverständnis Bildnutzung"),  # Pflichtfeld
-    category: str = Form("B", description="Führerschein-Kategorie"),  # Default: B
-    student_name: Optional[str] = Form(None, description="Vorname (optional)"),  # Optional
-    image: Optional[UploadFile] = File(None, description="Bild-Upload (optional)"),  # Optional
-    db: Session = Depends(get_db),  # Datenbank-Session (wird automatisch injiziert)
+    exam_date: date = Form(...),
+    consent_given: bool = Form(...),
+    category: str = Form("B"),
+    student_name: Optional[str] = Form(None),
+    details: Optional[str] = Form(None),           # Zusatzinfos für LLM
+    images: List[UploadFile] = File(default=[]),    # Mehrere Bilder möglich
+    db: Session = Depends(get_db),
 ):
-    """Erstellt einen neuen Erfolgs-Post.
-    
-    1. Prüft ob Consent gegeben wurde (Pflicht!)
-    2. Speichert optional das Bild auf der SSD
-    3. Erstellt den Datenbank-Eintrag mit Status 'draft'
-    """
-    
-    # Consent ist Pflicht – ohne geht nichts
+    """Erstellt einen neuen Erfolgs-Post mit optionalen Bildern und Details."""
+
     if not consent_given:
-        raise HTTPException(
-            status_code=400,  # Bad Request
-            detail="Einverständnis für Bildnutzung ist Pflicht (consent_given muss True sein)"
-        )
-    
-    # Bild speichern (falls hochgeladen)
-    image_path = None
-    if image:
-        # Eindeutigen Dateinamen generieren (verhindert Überschreibungen)
-        file_extension = os.path.splitext(image.filename)[1]  # z.B. ".jpg"
-        unique_filename = f"{uuid.uuid4()}{file_extension}"  # z.B. "a1b2c3d4.jpg"
-        
-        # Zielordner erstellen falls nicht vorhanden
-        upload_dir = os.path.join(settings.media_path, "success")
-        os.makedirs(upload_dir, exist_ok=True)  # Erstellt Ordner rekursiv
-        
-        # Datei auf SSD speichern
-        file_path = os.path.join(upload_dir, unique_filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(image.file, buffer)  # Kopiert Upload in Datei
-        
-        image_path = file_path  # Pfad für Datenbank merken
-    
+        raise HTTPException(status_code=400, detail="Einverständnis für Bildnutzung ist Pflicht")
+
+    # Alle hochgeladenen Bilder speichern
+    image_path = None    # Erstes Bild (Rückwärtskompatibilität)
+    saved_paths = []     # Alle Bilder als Liste
+
+    for img in images:
+        if img.filename:  # Leere File-Inputs überspringen
+            ext = os.path.splitext(img.filename)[1]
+            unique_name = f"{uuid.uuid4()}{ext}"
+            upload_dir = os.path.join(settings.media_path, "success")
+            os.makedirs(upload_dir, exist_ok=True)
+            file_path = os.path.join(upload_dir, unique_name)
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(img.file, buffer)
+            saved_paths.append(file_path)
+            if image_path is None:
+                image_path = file_path  # Erstes Bild für Rückwärtskompatibilität
+
     # Datenbank-Eintrag erstellen
     db_post = StudentSuccessPost(
-        user_id=1,  # TODO: Phase 2b – echten User aus Auth nehmen
+        user_id=1,  # TODO: Phase 2b – echten User aus Auth
         student_name=student_name,
         exam_date=exam_date,
         category=category,
         consent_given=consent_given,
         image_path=image_path,
-        status="draft",  # Neue Posts starten immer als Draft
+        image_paths=saved_paths if saved_paths else None,
+        details=details,
+        status="draft",
     )
     
     db.add(db_post)  # Zur Sitzung hinzufügen
@@ -263,7 +256,7 @@ async def generate_content(
         ig_result = await provider.generate_instagram_caption(
             student_name=student_name,
             exam_type=exam_type,
-            details=request_data.details,
+            details=request_data.details or post.details,  # Request-Details haben Vorrang, sonst gespeicherte
             training_examples=training_examples_ig if training_examples_ig else None
         )
     except Exception as e:
@@ -277,7 +270,7 @@ async def generate_content(
         tt_result = await provider.generate_tiktok_description(
             student_name=student_name,
             exam_type=exam_type,
-            details=request_data.details,
+            details=request_data.details or post.details,
             training_examples=training_examples_tt if training_examples_tt else None
         )
     except Exception as e:
