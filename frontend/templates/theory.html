@@ -1,0 +1,131 @@
+<!-- theory.html – Theorie-Posts für catchKen Content Hub -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>catchKen – Theorie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
+            <div class="header-text">
+                <h1>catchKen Content Hub</h1>
+                <p>Social Media Planner</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="/" class="btn-nav-link">Posts</a>
+            <a href="/theory" class="btn-nav-link active">Theorie</a>
+            <a href="/calendar" class="btn-nav-link">Kalender</a>
+            <a href="/training" class="btn-nav-link">Training</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Formular: Neuer Theorie-Post -->
+        <section class="card">
+            <h2>Neuer Theorie-Post</h2>
+            <form id="theory-form">
+                <div class="form-group">
+                    <label for="topic">Thema *</label>
+                    <input type="text" id="topic" required placeholder="z.B. Vortrittsregel rechts" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="content">Theorie-Inhalt *</label>
+                    <textarea id="content" rows="4" required
+                        placeholder="Der fachliche Inhalt, den der LLM als Post formulieren soll..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="source">Quelle (optional)</label>
+                    <input type="text" id="source" placeholder="z.B. Theoriebuch S. 42, ASA Fragenkatalog" maxlength="300">
+                </div>
+                <button type="submit" class="btn-primary">Theorie-Post erstellen</button>
+            </form>
+            <div id="form-message" class="message hidden"></div>
+        </section>
+
+        <!-- Liste der Theorie-Posts -->
+        <section class="card">
+            <h2>Alle Theorie-Posts</h2>
+            <div id="theory-list"><p class="loading">Lade Posts...</p></div>
+        </section>
+    </main>
+
+    <!-- Modal: Generierter Content -->
+    <div id="generate-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeGenModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Generierter Theorie-Content</h3>
+                <button class="modal-close" onclick="closeGenModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-provider-info" class="provider-info"></div>
+                <div class="generated-section">
+                    <h4>Instagram</h4>
+                    <textarea id="modal-ig-caption" rows="5"></textarea>
+                </div>
+                <div class="generated-section">
+                    <h4>TikTok</h4>
+                    <textarea id="modal-tt-description" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeGenModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="saveGenerated()">Caption übernehmen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Theorie-Post bearbeiten -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeEditModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Theorie-Post bearbeiten</h3>
+                <button class="modal-close" onclick="closeEditModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-topic">Thema</label>
+                    <input type="text" id="edit-topic" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="edit-content">Theorie-Inhalt</label>
+                    <textarea id="edit-content" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-source">Quelle</label>
+                    <input type="text" id="edit-source" maxlength="300">
+                </div>
+                <div class="form-group">
+                    <label for="edit-caption">Instagram Caption</label>
+                    <textarea id="edit-caption" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-story-text">TikTok Beschreibung</label>
+                    <textarea id="edit-story-text" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">Status</label>
+                    <select id="edit-status">
+                        <option value="draft">Draft</option>
+                        <option value="ready">Ready</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="saveEdit()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/theory.js"></script>
+</body>
+</html>
