@@ -12,6 +12,7 @@ import os
 from app.routers.student_success import router as success_router  # Erfolgs-Posts Endpunkte
 from app.routers.training_data import router as training_router  # Trainingsdaten Endpunkte
 from app.routers.scheduled_post import router as calendar_router
+from app.routers.theory import router as theory_router
 
 
 
@@ -43,7 +44,8 @@ templates = Jinja2Templates(directory="frontend/templates")
 # === Router registrieren ===
 app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
 app.include_router(training_router)  # Trainingsdaten unter /api/training-data/
-app.include_router(calendar_router) 
+app.include_router(calendar_router)
+app.include_router(theory_router)  # Theorie-Posts unter /api/theory/
 
 
 # === API Endpunkte (Routes) ===
@@ -64,3 +66,15 @@ async def health_check():
 async def calendar_page(request: Request):
     """Kalender-Ansicht für die Content-Planung."""
     return templates.TemplateResponse("calendar.html", {"request": request})
+
+
+@app.get("/theory")
+async def theory_page(request: Request):
+    """Theorie-Posts Seite."""
+    return templates.TemplateResponse("theory.html", {"request": request})
+
+
+@app.get("/training")
+async def training_page(request: Request):
+    """Trainingsdaten-Verwaltung."""
+    return templates.TemplateResponse("training.html", {"request": request})
