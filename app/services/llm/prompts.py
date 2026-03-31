@@ -154,6 +154,94 @@ def _format_training_examples(examples: list[dict]) -> str:
     return "\n\n".join(formatted_parts)
 
 
+# ============================================================
+# THEORIE-PROMPTS — Fahrschultheorie als Social-Media-Content
+# ============================================================
+
+def build_theory_instagram_prompt(
+    topic: str,
+    content: str,
+    training_examples: list[dict] | None = None
+) -> str:
+    """Baut den Prompt für einen Instagram-Theorie-Post."""
+
+    base_context = (
+        "Du bist der Social-Media-Manager einer Schweizer Fahrschule (catchKen). "
+        "Du schreibst Instagram-Posts die Fahrschultheorie einfach und verständlich erklären. "
+        "Der Ton ist lehrreich aber locker — nicht wie ein Lehrbuch, sondern wie ein Freund "
+        "der einem einen Tipp gibt. Auf Deutsch mit optionalem Schweizer Touch."
+    )
+
+    if training_examples and len(training_examples) > 0:
+        examples_text = _format_training_examples(training_examples)
+        return (
+            f"{base_context}\n\n"
+            f"Hier sind Beispiele wie wir Theorie-Posts schreiben:\n\n"
+            f"{examples_text}\n\n"
+            f"Erstelle jetzt einen Instagram-Post zu folgendem Theorie-Thema:\n"
+            f"- Thema: {topic}\n"
+            f"- Inhalt: {content}\n\n"
+            f"Antworte NUR mit dem fertigen Post-Text (inkl. Hashtags am Ende). "
+            f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+        )
+
+    return (
+        f"{base_context}\n\n"
+        f"Erstelle einen Instagram-Post zu folgendem Fahrschul-Theorie-Thema.\n\n"
+        f"Anforderungen:\n"
+        f"- Erkläre die Regel/das Thema einfach und korrekt\n"
+        f"- 2-4 Sätze, verständlich für Fahrschüler\n"
+        f"- Passende Emojis\n"
+        f"- 5-10 Hashtags am Ende (#fahrschule #theorie #fahrprüfung etc.)\n\n"
+        f"Thema: {topic}\n"
+        f"Inhalt: {content}\n\n"
+        f"Antworte NUR mit dem fertigen Post-Text (inkl. Hashtags am Ende). "
+        f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+    )
+
+
+def build_theory_tiktok_prompt(
+    topic: str,
+    content: str,
+    training_examples: list[dict] | None = None
+) -> str:
+    """Baut den Prompt für eine TikTok-Theorie-Beschreibung."""
+
+    base_context = (
+        "Du bist der Social-Media-Manager einer Schweizer Fahrschule (catchKen). "
+        "Du schreibst TikTok-Beschreibungen die Fahrschultheorie kurz und catchy erklären. "
+        "TikTok-Style: kurz, punchy, Emojis, Hook am Anfang. "
+        "Z.B. 'Wusstest du...?' oder 'Diesen Fehler machen 90% bei der Prüfung!'"
+    )
+
+    if training_examples and len(training_examples) > 0:
+        examples_text = _format_training_examples(training_examples)
+        return (
+            f"{base_context}\n\n"
+            f"Hier sind Beispiele wie wir Theorie-Posts auf TikTok schreiben:\n\n"
+            f"{examples_text}\n\n"
+            f"Erstelle jetzt eine TikTok-Beschreibung zu:\n"
+            f"- Thema: {topic}\n"
+            f"- Inhalt: {content}\n\n"
+            f"Antworte NUR mit der fertigen Beschreibung (inkl. Hashtags am Ende). "
+            f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+        )
+
+    return (
+        f"{base_context}\n\n"
+        f"Erstelle eine TikTok-Beschreibung zu einem Fahrschul-Theorie-Thema.\n\n"
+        f"Anforderungen:\n"
+        f"- Catchy Hook am Anfang\n"
+        f"- 1-2 Sätze, ultra-kurz\n"
+        f"- Viele Emojis\n"
+        f"- Hashtags am Ende (#fyp #fahrschule #theorie etc.)\n\n"
+        f"Thema: {topic}\n"
+        f"Inhalt: {content}\n\n"
+        f"Antworte NUR mit der fertigen Beschreibung (inkl. Hashtags am Ende). "
+        f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+    )
+
+
 def parse_instagram_response(raw_response: str) -> dict:
     """
     Gibt den rohen LLM-Text als Instagram-Caption zurück.
