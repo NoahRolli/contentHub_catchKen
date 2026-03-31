@@ -1,5 +1,4 @@
 <!-- index.html – Posts-Seite des catchKen Content Hub -->
-<!-- Formular zum Erstellen und Liste aller Posts -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -10,7 +9,7 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <!-- === Header === -->
+    <!-- Header -->
     <header>
         <div class="header-top">
             <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
@@ -26,30 +25,21 @@
     </header>
 
     <main>
-        <!-- === Trainingsdaten-Status === -->
-        <section class="card training-status" id="training-status">
-            <!-- Wird per JavaScript gefüllt -->
-        </section>
+        <!-- Trainingsdaten-Status -->
+        <section class="card training-status" id="training-status"></section>
 
-        <!-- === Formular: Neuer Post === -->
+        <!-- Formular: Neuer Post -->
         <section class="card">
             <h2>Post: Prüfung bestanden</h2>
             <form id="success-form" enctype="multipart/form-data">
-                
-                <!-- Vorname (optional) -->
                 <div class="form-group">
                     <label for="student_name">Vorname (optional)</label>
-                    <input type="text" id="student_name" name="student_name" 
-                           placeholder="z.B. Max" maxlength="100">
+                    <input type="text" id="student_name" name="student_name" placeholder="z.B. Max" maxlength="100">
                 </div>
-
-                <!-- Prüfungsdatum (Pflicht) -->
                 <div class="form-group">
                     <label for="exam_date">Prüfungsdatum *</label>
                     <input type="date" id="exam_date" name="exam_date" required>
                 </div>
-
-                <!-- Kategorie -->
                 <div class="form-group">
                     <label for="category">Kategorie</label>
                     <select id="category" name="category">
@@ -61,39 +51,34 @@
                         <option value="D">D – Bus</option>
                     </select>
                 </div>
-
-                <!-- Bild-Upload (optional) -->
+                <!-- Details-Feld: Zusatzinfos die der LLM beim Generieren bekommt -->
                 <div class="form-group">
-                    <label for="image">Bild (optional)</label>
-                    <input type="file" id="image" name="image" accept="image/*">
+                    <label for="details">Details für KI (optional)</label>
+                    <textarea id="details" name="details" rows="2"
+                        placeholder="z.B. Beim ersten Versuch bestanden, war sehr aufgeregt..."></textarea>
                 </div>
-
-                <!-- Consent (Pflicht) -->
+                <!-- Mehrere Bilder möglich -->
+                <div class="form-group">
+                    <label for="images">Bilder (optional, mehrere möglich)</label>
+                    <input type="file" id="images" name="images" accept="image/*" multiple>
+                </div>
                 <div class="form-group checkbox-group">
                     <input type="checkbox" id="consent_given" name="consent_given" required>
-                    <label for="consent_given">
-                        Einverständnis für Bildnutzung auf Social Media *
-                    </label>
+                    <label for="consent_given">Einverständnis für Bildnutzung auf Social Media *</label>
                 </div>
-
-                <!-- Submit Button -->
                 <button type="submit" class="btn-primary">Post erstellen</button>
             </form>
-
-            <!-- Feedback-Nachricht -->
             <div id="form-message" class="message hidden"></div>
         </section>
 
-        <!-- === Liste der Posts === -->
+        <!-- Liste der Posts -->
         <section class="card">
             <h2>Alle Posts</h2>
-            <div id="posts-list">
-                <p class="loading">Lade Posts...</p>
-            </div>
+            <div id="posts-list"><p class="loading">Lade Posts...</p></div>
         </section>
     </main>
 
-    <!-- === Modal: Generierte Captions === -->
+    <!-- Modal: Generierter Content (LLM) -->
     <div id="generate-modal" class="modal hidden">
         <div class="modal-backdrop" onclick="closeModal()"></div>
         <div class="modal-content">
@@ -103,12 +88,10 @@
             </div>
             <div class="modal-body">
                 <div id="modal-provider-info" class="provider-info"></div>
-
                 <div class="generated-section">
                     <h4>Instagram</h4>
                     <textarea id="modal-ig-caption" rows="5"></textarea>
                 </div>
-
                 <div class="generated-section">
                     <h4>TikTok</h4>
                     <textarea id="modal-tt-description" rows="4"></textarea>
@@ -116,9 +99,96 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeModal()">Abbrechen</button>
-                <button class="btn-primary" id="modal-save-btn" onclick="saveGenerated()">
-                    Caption übernehmen
-                </button>
+                <button class="btn-primary" onclick="saveGenerated()">Caption übernehmen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Post bearbeiten -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeEditModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Post bearbeiten</h3>
+                <button class="modal-close" onclick="closeEditModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-student-name">Vorname</label>
+                    <input type="text" id="edit-student-name" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="edit-exam-date">Prüfungsdatum</label>
+                    <input type="date" id="edit-exam-date">
+                </div>
+                <div class="form-group">
+                    <label for="edit-category">Kategorie</label>
+                    <select id="edit-category">
+                        <option value="B">B – Auto</option>
+                        <option value="A">A – Motorrad</option>
+                        <option value="A1">A1 – Kleinmotorrad</option>
+                        <option value="BE">BE – Auto mit Anhänger</option>
+                        <option value="C">C – Lastwagen</option>
+                        <option value="D">D – Bus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-details">Details für KI</label>
+                    <textarea id="edit-details" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-caption">Instagram Caption</label>
+                    <textarea id="edit-caption" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-story-text">TikTok Beschreibung</label>
+                    <textarea id="edit-story-text" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">Status</label>
+                    <select id="edit-status">
+                        <option value="draft">Draft</option>
+                        <option value="ready">Ready</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEditModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="saveEdit()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Im Kalender einplanen -->
+    <div id="schedule-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeScheduleModal()"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Im Kalender einplanen</h3>
+                <button class="modal-close" onclick="closeScheduleModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="schedule-date">Datum *</label>
+                    <input type="date" id="schedule-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="schedule-time">Uhrzeit (optional)</label>
+                    <input type="time" id="schedule-time">
+                </div>
+                <div class="form-group">
+                    <label for="schedule-platform">Plattform</label>
+                    <select id="schedule-platform">
+                        <option value="both">Instagram + TikTok</option>
+                        <option value="instagram">Nur Instagram</option>
+                        <option value="tiktok">Nur TikTok</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeScheduleModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="saveSchedule()">Einplanen</button>
             </div>
         </div>
     </div>

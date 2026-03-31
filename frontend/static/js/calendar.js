@@ -4,9 +4,10 @@
 const API_CAL = "/api/calendar";
 
 // === State ===
-let currentView = "week";       // "week", "twoweek", "month"
-let currentDate = new Date();   // Referenz-Datum für Navigation
-let draggedPostId = null;       // ID des aktuell gezogenen Posts
+let currentView = "week";
+let currentDate = new Date();
+let draggedPostId = null;
+let currentEditCalId = null;    // ID des zu bearbeitenden Kalender-Eintrags
 
 // === DOM-Referenzen ===
 const calendarTitle = document.getElementById("calendar-title");
@@ -209,7 +210,7 @@ function updateTitle(start, end) {
 // Drag & Drop
 // =====================================================
 function setupDragAndDrop() {
-    // Posts: Drag starten
+    // Posts: Drag starten + Doppelklick zum Bearbeiten
     document.querySelectorAll(".calendar-post").forEach(el => {
         el.addEventListener("dragstart", (e) => {
             draggedPostId = el.dataset.id;
@@ -219,6 +220,10 @@ function setupDragAndDrop() {
         el.addEventListener("dragend", () => {
             el.classList.remove("dragging");
             draggedPostId = null;
+        });
+        el.addEventListener("dblclick", (e) => {
+            e.stopPropagation();
+            openEditCalModal(el.dataset.id);
         });
     });
 
@@ -293,9 +298,80 @@ async function saveEntry() {
     }
 }
 
-// Escape schliesst Modal
+// =====================================================
+// Edit-Modal: Kalender-Eintrag bearbeiten / löschen
+// =====================================================
+async function openEditCalModal(postId) {
+    currentEditCalId = postId;
+
+    try {
+        const res = await fetch(`${API_CAL}/${postId}`);
+        if (!res.ok) return;
+        const post = await res.json();
+
+        document.getElementById("edit-cal-type").value = post.content_type;
+        document.getElementById("edit-cal-date").value = post.scheduled_date;
+        document.getElementById("edit-cal-time").value = post.scheduled_time || "";
+        document.getElementById("edit-cal-platform").value = post.platform;
+        document.getElementById("edit-cal-notes").value = post.notes || "";
+        document.getElementById("edit-cal-status").value = post.status;
+        document.getElementById("edit-cal-modal").classList.remove("hidden");
+    } catch (err) {
+        console.error("Eintrag laden fehlgeschlagen:", err);
+    }
+}
+
+function closeEditCalModal() {
+    document.getElementById("edit-cal-modal").classList.add("hidden");
+    currentEditCalId = null;
+}
+
+async function saveEditCal() {
+    if (!currentEditCalId) return;
+
+    const body = {
+        content_type: document.getElementById("edit-cal-type").value,
+        scheduled_date: document.getElementById("edit-cal-date").value,
+        scheduled_time: document.getElementById("edit-cal-time").value || null,
+        platform: document.getElementById("edit-cal-platform").value,
+        notes: document.getElementById("edit-cal-notes").value || null,
+        status: document.getElementById("edit-cal-status").value,
+    };
+
+    try {
+        const res = await fetch(`${API_CAL}/${currentEditCalId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+        if (res.ok) {
+            closeEditCalModal();
+            renderCalendar();
+        }
+    } catch (err) {
+        console.error("Speichern fehlgeschlagen:", err);
+    }
+}
+
+async function deleteCalEntry() {
+    if (!currentEditCalId) return;
+    if (!confirm("Diesen Eintrag wirklich löschen?")) return;
+
+    try {
+        await fetch(`${API_CAL}/${currentEditCalId}`, { method: "DELETE" });
+        closeEditCalModal();
+        renderCalendar();
+    } catch (err) {
+        console.error("Löschen fehlgeschlagen:", err);
+    }
+}
+
+// Escape schliesst beide Modals
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeEntryModal();
+    if (e.key === "Escape") {
+        closeEntryModal();
+        closeEditCalModal();
+    }
 });
 
 

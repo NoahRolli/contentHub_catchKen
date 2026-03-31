@@ -1,6 +1,5 @@
 <!-- calendar.html – Kalender-Ansicht des catchKen Content Hub -->
-<!-- Zeigt geplante Posts in Wochen-/2-Wochen-/Monatsansicht -->
-<!-- Drag & Drop zum Verschieben von Posts zwischen Tagen -->
+<!-- Geplante Posts in Wochen-/2-Wochen-/Monatsansicht mit Drag & Drop -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -12,12 +11,18 @@
     <link rel="stylesheet" href="/static/css/calendar.css">
 </head>
 <body>
-    <!-- === Header === -->
+    <!-- === Header (identisch mit index.html) === -->
     <header>
-        <h1>catchKen Content Hub</h1>
+        <div class="header-top">
+            <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
+            <div class="header-text">
+                <h1>catchKen Content Hub</h1>
+                <p>Social Media Planner</p>
+            </div>
+        </div>
         <nav class="header-nav">
-            <a href="/">Posts</a>
-            <a href="/calendar" class="active">Kalender</a>
+            <a href="/" class="btn-nav-link">Posts</a>
+            <a href="/calendar" class="btn-nav-link active">Kalender</a>
         </nav>
     </header>
 
@@ -38,12 +43,8 @@
         </div>
 
         <!-- === Kalender Grid === -->
-        <div class="calendar-header" id="calendar-header">
-            <!-- Wochentage werden per JS gesetzt -->
-        </div>
-        <div class="calendar-grid" id="calendar-grid">
-            <!-- Tages-Zellen werden per JS generiert -->
-        </div>
+        <div class="calendar-header" id="calendar-header"></div>
+        <div class="calendar-grid" id="calendar-grid"></div>
     </main>
 
     <!-- === Modal: Neuer Kalender-Eintrag === -->
@@ -58,7 +59,7 @@
                 <div class="form-group">
                     <label for="entry-type">Content-Typ</label>
                     <select id="entry-type">
-                        <option value="success">Erfolgs-Post</option>
+                        <option value="success">Post: Prüfung bestanden</option>
                         <option value="news">News</option>
                         <option value="theory">Theorie</option>
                         <option value="review">Review</option>
@@ -88,6 +89,61 @@
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeEntryModal()">Abbrechen</button>
                 <button class="btn-primary" id="btn-save-entry">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Kalender-Eintrag bearbeiten -->
+    <div id="edit-cal-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeEditCalModal()"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Eintrag bearbeiten</h3>
+                <button class="modal-close" onclick="closeEditCalModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-cal-type">Content-Typ</label>
+                    <select id="edit-cal-type">
+                        <option value="success">Post: Prüfung bestanden</option>
+                        <option value="news">News</option>
+                        <option value="theory">Theorie</option>
+                        <option value="review">Review</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cal-date">Datum</label>
+                    <input type="date" id="edit-cal-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cal-time">Uhrzeit (optional)</label>
+                    <input type="time" id="edit-cal-time">
+                </div>
+                <div class="form-group">
+                    <label for="edit-cal-platform">Plattform</label>
+                    <select id="edit-cal-platform">
+                        <option value="both">Instagram + TikTok</option>
+                        <option value="instagram">Nur Instagram</option>
+                        <option value="tiktok">Nur TikTok</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cal-notes">Notizen (optional)</label>
+                    <textarea id="edit-cal-notes" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cal-status">Status</label>
+                    <select id="edit-cal-status">
+                        <option value="draft">Draft</option>
+                        <option value="ready">Ready</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-small btn-delete" onclick="deleteCalEntry()">Löschen</button>
+                <button class="btn-secondary" onclick="closeEditCalModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="saveEditCal()">Speichern</button>
             </div>
         </div>
     </div>
