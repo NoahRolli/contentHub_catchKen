@@ -242,6 +242,111 @@ def build_theory_tiktok_prompt(
     )
 
 
+# ============================================================
+# NEWS-PROMPTS — Verkehrsnews als Social-Media-Content
+# Quelle wird immer im Post vermerkt!
+# ============================================================
+
+def build_news_instagram_prompt(
+    title: str,
+    summary: str,
+    source_name: str,
+    source_url: str,
+    training_examples: list[dict] | None = None
+) -> str:
+    """Baut den Prompt für einen Instagram-News-Post.
+    Quelle wird immer im Post vermerkt."""
+
+    base_context = (
+        "Du bist der Social-Media-Manager einer Schweizer Fahrschule (catchKen). "
+        "Du schreibst Instagram-Posts über aktuelle Verkehrsnews aus der Schweiz. "
+        "Der Fokus liegt auf Sicherheit, Prävention und Tipps für Fahrschüler. "
+        "Der Ton ist sachlich aber zugänglich — keine reisserischen Formulierungen."
+    )
+
+    source_instruction = (
+        f"WICHTIG: Vermerke die Quelle am Ende des Posts (vor den Hashtags) so:\n"
+        f"Quelle: {source_name}"
+    )
+
+    if training_examples and len(training_examples) > 0:
+        examples_text = _format_training_examples(training_examples)
+        return (
+            f"{base_context}\n\n"
+            f"Hier sind Beispiele wie wir News-Posts schreiben:\n\n"
+            f"{examples_text}\n\n"
+            f"Erstelle jetzt einen Instagram-Post zu folgender News:\n"
+            f"- Titel: {title}\n"
+            f"- Zusammenfassung: {summary}\n\n"
+            f"{source_instruction}\n\n"
+            f"Antworte NUR mit dem fertigen Post-Text (inkl. Quellenangabe + Hashtags am Ende). "
+            f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+        )
+
+    return (
+        f"{base_context}\n\n"
+        f"Erstelle einen Instagram-Post zu folgender Schweizer Verkehrsnews.\n\n"
+        f"Anforderungen:\n"
+        f"- Kurze Zusammenfassung der News (2-3 Sätze)\n"
+        f"- Sicherheitstipp oder Präventionshinweis für Fahrschüler ableiten\n"
+        f"- Passende Emojis\n"
+        f"- 5-10 Hashtags am Ende\n\n"
+        f"News:\n"
+        f"- Titel: {title}\n"
+        f"- Zusammenfassung: {summary}\n\n"
+        f"{source_instruction}\n\n"
+        f"Antworte NUR mit dem fertigen Post-Text (inkl. Quellenangabe + Hashtags am Ende). "
+        f"Kein anderer Text, keine Erklärungen, keine Anführungszeichen."
+    )
+
+
+def build_news_tiktok_prompt(
+    title: str,
+    summary: str,
+    source_name: str,
+    source_url: str,
+    training_examples: list[dict] | None = None
+) -> str:
+    """Baut den Prompt für eine TikTok-News-Beschreibung."""
+
+    base_context = (
+        "Du bist der Social-Media-Manager einer Schweizer Fahrschule (catchKen). "
+        "Du schreibst TikTok-Beschreibungen über Verkehrsnews. "
+        "TikTok-Style: catchy Hook, kurz, Emojis, Sicherheitstipp."
+    )
+
+    source_instruction = f"Vermerke die Quelle kurz: (Quelle: {source_name})"
+
+    if training_examples and len(training_examples) > 0:
+        examples_text = _format_training_examples(training_examples)
+        return (
+            f"{base_context}\n\n"
+            f"Beispiele:\n\n{examples_text}\n\n"
+            f"Erstelle eine TikTok-Beschreibung zu:\n"
+            f"- Titel: {title}\n"
+            f"- Zusammenfassung: {summary}\n\n"
+            f"{source_instruction}\n\n"
+            f"Antworte NUR mit der fertigen Beschreibung (inkl. Quelle + Hashtags). "
+            f"Kein anderer Text, keine Anführungszeichen."
+        )
+
+    return (
+        f"{base_context}\n\n"
+        f"Erstelle eine TikTok-Beschreibung zu einer Schweizer Verkehrsnews.\n\n"
+        f"Anforderungen:\n"
+        f"- Catchy Hook am Anfang\n"
+        f"- 1-2 Sätze + Sicherheitstipp\n"
+        f"- Emojis\n"
+        f"- Hashtags am Ende\n\n"
+        f"News:\n"
+        f"- Titel: {title}\n"
+        f"- Zusammenfassung: {summary}\n\n"
+        f"{source_instruction}\n\n"
+        f"Antworte NUR mit der fertigen Beschreibung (inkl. Quelle + Hashtags). "
+        f"Kein anderer Text, keine Anführungszeichen."
+    )
+
+
 def parse_instagram_response(raw_response: str) -> dict:
     """
     Gibt den rohen LLM-Text als Instagram-Caption zurück.
