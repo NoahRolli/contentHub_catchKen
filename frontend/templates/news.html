@@ -1,0 +1,96 @@
+<!-- news.html – RSS-News Posts für catchKen Content Hub -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>catchKen – News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <img src="/static/img/logo.png" alt="catchKen" class="header-logo">
+            <div class="header-text">
+                <h1>catchKen Content Hub</h1>
+                <p>Social Media Planner</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="/" class="btn-nav-link">Posts</a>
+            <a href="/theory" class="btn-nav-link">Theorie</a>
+            <a href="/news" class="btn-nav-link active">News</a>
+            <a href="/calendar" class="btn-nav-link">Kalender</a>
+            <a href="/training" class="btn-nav-link">Training</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- RSS-Quellen verwalten -->
+        <section class="card">
+            <h2>RSS-Quellen</h2>
+            <form id="source-form">
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                        <label for="source-name">Name *</label>
+                        <input type="text" id="source-name" required placeholder="z.B. SRF News">
+                    </div>
+                    <div class="form-group" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                        <label for="source-url">RSS-Feed URL *</label>
+                        <input type="text" id="source-url" required placeholder="https://www.srf.ch/news/bnf/rss/1646">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                        <label for="source-keywords">Keywords (optional)</label>
+                        <input type="text" id="source-keywords" placeholder="Unfall,Verkehr,Auto">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: auto; margin-top: 0; white-space: nowrap;">
+                        Quelle hinzufügen
+                    </button>
+                </div>
+            </form>
+            <div id="source-message" class="message hidden"></div>
+            <div id="sources-list" style="margin-top: 1rem;"></div>
+        </section>
+
+        <!-- Scan-Bereich -->
+        <section class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Gescannte Artikel</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-generate" onclick="scanAll()">Alle Feeds scannen</button>
+                </div>
+            </div>
+            <div id="scan-message" class="message hidden"></div>
+            <div id="news-list"><p class="loading">Lade Artikel...</p></div>
+        </section>
+    </main>
+
+    <!-- Modal: Generierter News-Content -->
+    <div id="generate-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeGenModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Generierter News-Post</h3>
+                <button class="modal-close" onclick="closeGenModal()">&#x2715;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-provider-info" class="provider-info"></div>
+                <div class="generated-section">
+                    <h4>Instagram</h4>
+                    <textarea id="modal-ig-caption" rows="6"></textarea>
+                </div>
+                <div class="generated-section">
+                    <h4>TikTok</h4>
+                    <textarea id="modal-tt-description" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeGenModal()">Schliessen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/news.js"></script>
+</body>
+</html>
