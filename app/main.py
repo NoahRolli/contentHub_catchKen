@@ -13,6 +13,7 @@ from app.routers.student_success import router as success_router  # Erfolgs-Post
 from app.routers.training_data import router as training_router  # Trainingsdaten Endpunkte
 from app.routers.scheduled_post import router as calendar_router
 from app.routers.theory import router as theory_router
+from app.routers.news import router as news_router
 
 
 
@@ -46,6 +47,7 @@ app.include_router(success_router)  # Erfolgs-Posts unter /api/success/
 app.include_router(training_router)  # Trainingsdaten unter /api/training-data/
 app.include_router(calendar_router)
 app.include_router(theory_router)  # Theorie-Posts unter /api/theory/
+app.include_router(news_router)    # News unter /api/news/
 
 
 # === API Endpunkte (Routes) ===
@@ -72,6 +74,12 @@ async def calendar_page(request: Request):
 async def theory_page(request: Request):
     """Theorie-Posts Seite."""
     return templates.TemplateResponse("theory.html", {"request": request})
+
+
+@app.get("/news")
+async def news_page(request: Request):
+    """News-Seite für RSS-basierte Posts."""
+    return templates.TemplateResponse("news.html", {"request": request})
 
 
 @app.get("/training")
