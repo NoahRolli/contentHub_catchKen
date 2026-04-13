@@ -1,6 +1,6 @@
 # catchKen Content Hub – Auto-generierte Dokumentation
 
-> Automatisch generiert am 31.03.2026 12:19 via GitHub Actions
+> Automatisch generiert am 13.04.2026 18:54 via GitHub Actions
 
 ---
 
@@ -12,6 +12,7 @@
 | `GET` | `/health` | `health_check` | Wird genutzt um zu prüfen ob der Server läuft. |
 | `GET` | `/calendar` | `calendar_page` | Kalender-Ansicht für die Content-Planung. |
 | `GET` | `/theory` | `theory_page` | Theorie-Posts Seite. |
+| `GET` | `/news` | `news_page` | News-Seite für RSS-basierte Posts. |
 | `GET` | `/training` | `training_page` | Trainingsdaten-Verwaltung. |
 
 ---
